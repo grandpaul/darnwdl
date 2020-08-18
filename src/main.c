@@ -11,6 +11,7 @@
 
 #include "support.h"
 #include "myfunc.h"
+#include "callbacks.h"
 
 int
 main (int argc, char *argv[])
@@ -29,7 +30,7 @@ main (int argc, char *argv[])
   textdomain (GETTEXT_PACKAGE);
 #endif
 
-  gtk_set_locale ();
+  setlocale (LC_ALL, "");
   gtk_init (&argc, &argv);
 
   add_directory (PACKAGE_DATA_DIR "/" PACKAGE "/pixmaps");
@@ -72,7 +73,7 @@ main (int argc, char *argv[])
   
   g_option_context_free(context);
   
-  if (argc == 2 && argv[1] != '\0') {
+  if (argc == 2 && argv[1] != NULL && argv[1][0] != '\0') {
     FILE *tempfile=NULL;
     wdlpass1_fileheader* wdlpass1header=NULL;
     myfunc_closewdlo();

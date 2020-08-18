@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(darnwdl, 0.5)
+AC_INIT([darnwdl], [0.5])
 AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
 
 AC_ISC_POSIX
@@ -12,7 +12,7 @@ AC_HEADER_STDC
 
 AC_HAVE_LIBRARY([dynamite])
 AC_HAVE_LIBRARY([jpeg])
-pkg_modules="gtk+-2.0 >= 2.6.0"
+pkg_modules="gtk+-3.0 >= 3.0.0"
 PKG_CHECK_MODULES(PACKAGE, [$pkg_modules])
 AC_SUBST(PACKAGE_CFLAGS)
 AC_SUBST(PACKAGE_LIBS)

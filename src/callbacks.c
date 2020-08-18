@@ -241,7 +241,7 @@ on_toolbuttonfith_clicked           (GtkToolButton   *toolbutton,
   mainImage = GTK_IMAGE(lookup_widget(GTK_WIDGET(toolbutton),"mainimage"));
   win1 = GTK_SCROLLED_WINDOW(lookup_widget(GTK_WIDGET(toolbutton),"scrolledwindow1"));
   win1_adj = gtk_scrolled_window_get_vadjustment(win1);
-  page_height = (int)(win1_adj->page_size);
+  page_height = (int)(gtk_adjustment_get_page_size(win1_adj));
   if (page_height<=0) {
     return;
   }
@@ -271,7 +271,7 @@ on_toolbuttonfitw_clicked           (GtkToolButton   *toolbutton,
   mainImage = GTK_IMAGE(lookup_widget(GTK_WIDGET(toolbutton),"mainimage"));
   win1 = GTK_SCROLLED_WINDOW(lookup_widget(GTK_WIDGET(toolbutton),"scrolledwindow1"));
   win1_adj = gtk_scrolled_window_get_hadjustment(win1);
-  page_width = (int)(win1_adj->page_size);
+  page_width = (int)(gtk_adjustment_get_page_size(win1_adj));
   if (page_width<=0) {
     return;
   }
@@ -302,8 +302,8 @@ on_toolbuttonfitp_clicked           (GtkToolButton   *toolbutton,
   win1 = GTK_SCROLLED_WINDOW(lookup_widget(GTK_WIDGET(toolbutton),"scrolledwindow1"));
   win1_adj = gtk_scrolled_window_get_hadjustment(win1);
   win1_adj2 = gtk_scrolled_window_get_vadjustment(win1);
-  page_width = (int)(win1_adj->page_size);
-  page_height = (int)(win1_adj2->page_size);
+  page_width = (int)(gtk_adjustment_get_page_size(win1_adj));
+  page_height = (int)(gtk_adjustment_get_page_size(win1_adj2));
   if (page_width<=0 || page_height<=0) {
     return;
   }
@@ -339,7 +339,7 @@ on_scrolledwindow1_key_release_event (GtkWidget *widget, GdkEvent *event,
  gpointer user_data) {
   GdkEventKey *key = (GdkEventKey*)event;
   if (key->type == GDK_KEY_RELEASE) {
-    if (key->keyval == GDK_Page_Down) {
+    if (key->keyval == GDK_KEY_Page_Down) {
       GtkScrolledWindow *scrolledWindow=NULL;
       GtkAdjustment *adj=NULL;
       gdouble current,upper,step;
@@ -367,7 +367,7 @@ on_scrolledwindow1_key_release_event (GtkWidget *widget, GdkEvent *event,
         gtk_adjustment_set_value(adj,upper);
       }
       return TRUE;
-    } else if (key->keyval == GDK_Page_Up) {
+    } else if (key->keyval == GDK_KEY_Page_Up) {
       GtkScrolledWindow *scrolledWindow=NULL;
       GtkAdjustment *adj=NULL;
       gdouble current,lower,step;
