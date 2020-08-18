@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="32"
+   height="32"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.44.1"
+   version="1.0"
+   sodipodi:docbase="/home/paulliu/tmp/darnwdl"
+   sodipodi:docname="darnwdlicon.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="17.149865"
+     inkscape:cy="21.249643"
+     inkscape:document-units="px"
+     inkscape:current-layer="g8969"
+     width="32px"
+     height="32px"
+     inkscape:window-width="920"
+     inkscape:window-height="628"
+     inkscape:window-x="189"
+     inkscape:window-y="82" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/LGPL/2.1/" />
+        <dc:title>darnwdl icon</dc:title>
+        <dc:date>2007-01-05</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Ying-Chun Liu (PaulLiu)</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Ying-Chun Liu (PaulLiu)</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:language>en</dc:language>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/LGPL/2.1/">
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:requires
+           rdf:resource="http://web.resource.org/cc/Notice" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://web.resource.org/cc/ShareAlike" />
+        <cc:requires
+           rdf:resource="http://web.resource.org/cc/SourceCode" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-176.55,-484.1273)">
+    <g
+       id="g8969"
+       transform="matrix(0.119135,0,0,0.1158,156.3122,428.9493)">
+      <path
+         sodipodi:nodetypes="cczzzc"
+         id="path1872"
+         d="M 378.57143,626.21933 C 339.10922,586.4754 269.17723,587.51928 243.28571,622.07647 C 185.5899,578.19105 223.32498,493.04652 294.42857,490.6479 C 365.53216,488.24928 427.75332,547.29854 426.85714,615.6479 C 425.96096,683.99726 366.73017,741.30253 308,742.07647 C 249.26517,742.85047 209.79133,714.11004 183,659.79075"
+         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:red;stroke-width:12.89999962;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         d="M 287 551.86218 A 12.5 18.5 0 1 1  262,551.86218 A 12.5 18.5 0 1 1  287 551.86218 z"
+         sodipodi:ry="18.5"
+         sodipodi:rx="12.5"
+         sodipodi:cy="551.86218"
+         sodipodi:cx="274.5"
+         id="path2762"
+         style="fill:red;fill-opacity:1;stroke:none;stroke-width:0.30000001;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         sodipodi:type="arc" />
+      <path
+         transform="translate(59,0)"
+         sodipodi:type="arc"
+         style="fill:red;fill-opacity:1;stroke:none;stroke-width:0.30000001;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path4534"
+         sodipodi:cx="274.5"
+         sodipodi:cy="551.86218"
+         sodipodi:rx="12.5"
+         sodipodi:ry="18.5"
+         d="M 287 551.86218 A 12.5 18.5 0 1 1  262,551.86218 A 12.5 18.5 0 1 1  287 551.86218 z" />
+      <path
+         id="path4536"
+         d="M 247,517.36218 L 290,535.36218"
+         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:8.51385081;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+      <path
+         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:8.51385081;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+         d="M 362,517.36218 L 319,535.36218"
+         id="path4540" />
+      <path
+         id="path4542"
+         d="M 385,612.36218 L 359,641.36218"
+         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:red;stroke-width:12.89999962;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>
