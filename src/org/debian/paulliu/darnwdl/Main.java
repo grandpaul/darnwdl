@@ -129,6 +129,13 @@ public class Main {
 	    myMain.unittest();
 	    return;
 	}
+	if (args.length >= 3 && args[0].equals("wpass1")) {
+	    java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.INFO);
+	    java.io.File inputFile = new File(args[1]);
+	    java.io.File outputFile = new File(args[2]);
+	    WPass1 wpass1 = new WPass1(inputFile, outputFile);
+	    return;
+	}
 	java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.SEVERE);
 	for (int i=0; args!=null && i<args.length; i++) {
 	    if (args[i].equals("debug")) {
