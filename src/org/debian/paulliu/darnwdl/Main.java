@@ -136,6 +136,20 @@ public class Main {
 	    WPass1 wpass1 = new WPass1(inputFile, outputFile);
 	    return;
 	}
+	if (args.length >= 2 && args[0].equals("wpass2")) {
+	    java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.INFO);
+	    java.io.File inputFile = new File(args[1]);
+	    WPass2 wpass2 = new WPass2(inputFile);
+	    java.util.ArrayList <org.debian.paulliu.darnwdl.wdlo.Index> indexList = wpass2.getIndexList();
+	    for (org.debian.paulliu.darnwdl.wdlo.Index i : indexList) {
+		if (i.getTag() != null) {
+		    System.out.println(String.format("%1$s: %2$d", i.getTag(), i.getFilePointer()));
+		} else {
+		    System.out.println(String.format("special %1$d: %2$d", i.getSpecialByte(), i.getFilePointer()));
+		}
+	    }
+	    return;
+	}
 	java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.SEVERE);
 	for (int i=0; args!=null && i<args.length; i++) {
 	    if (args[i].equals("debug")) {

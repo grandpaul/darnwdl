@@ -266,6 +266,15 @@ public class WPass1 {
 	if (! decode()) {
 	    return;
 	}
-	
+	try {
+	    outputFileStream.flush();
+	} catch (java.io.IOException e) {
+	    logger.warning("Cannot flush wdlo file");
+	}
+	try {
+	    outputFileStream.close();
+	} catch (java.io.IOException e) {
+	    logger.warning("Cannot close wdlo file");
+	}
     }
 }
