@@ -203,10 +203,13 @@ public class WPass1 {
 		java.util.ArrayList<Long> dataLength = readDynaPKCP();
 		long compressedDataLength = dataLength.get(0).longValue();
 		long decompressedDataLength = dataLength.get(1).longValue();
-		byte data[] = inputFileStream.readNBytes(((int)compressedDataLength));
-		byte[] result = new byte[((int)decompressedDataLength)];
-		// TODO: seems we need to call libdynamite by JNI?
-		
+		byte[] data = inputFileStream.readNBytes(((int)compressedDataLength));
+		byte[] result;
+
+		org.debian.paulliu.darnwdl.jni.DynamiteJNI dynamiteJNI = org.debian.paulliu.darnwdl.jni.DynamiteJNI.getInstance();
+
+		result = dynamiteJNI.explode(data);
+		outputFileStream.write(result);
 	    }
 	} catch (Exception e) {
 	    logger.severe(String.format("Decode error: %1$s", e.toString()));
