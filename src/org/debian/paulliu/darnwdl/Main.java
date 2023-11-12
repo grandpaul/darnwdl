@@ -37,31 +37,13 @@ public class Main {
     private Scanner stdin = new Scanner(System.in);
     private java.util.logging.Logger logger = null;
     public static String loggerName = "MainLogger";
-    //private MyApplet myapplet = null;
-    private JFrame myframe = null;
+    private JFrame mainWindow = null;
 
     /**
      * Init class data here
      */
     private void init() {
-	//myapplet = null;
-	myframe = null;
-
-	//myapplet = new MyApplet();
-	myframe = new JFrame("darnwdl");
-	
-	myframe.addWindowListener(new WindowAdapter() {
-		public void windowClosing(WindowEvent e) {
-		    Window w = e.getWindow();
-		    //myapplet.stop();
-		    System.exit(0);
-		}
-	    });
-	
-	//myframe.getContentPane().add(myapplet);
-	myframe.setSize(640,480);
-	myframe.setVisible(true);
-	
+	mainWindow = new org.debian.paulliu.darnwdl.ui.MainWindow();
     }
 
     /**
