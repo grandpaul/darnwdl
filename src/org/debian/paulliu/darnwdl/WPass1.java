@@ -32,39 +32,11 @@ public class WPass1 {
     private java.util.LinkedHashMap<String,java.util.ArrayList<Long> > properties;
 
     private long readInt32() {
-	long ret=0;
-	long b;
-	long factor = 1;
-
-	for (int i=0; i<4; i++) {
-	    try {
-		b = inputFileStream.read();
-	    } catch (Exception e) {
-		logger.severe("Failed to read Int32");
-		return -1;
-	    }
-	    ret = ret + b * factor;
-	    factor = factor * 256;
-	}
-	return ret;
+	return IO.readInt32(inputFileStream);
     }
 
     private int readInt16() {
-	int ret=0;
-	int b;
-	int factor = 1;
-
-	for (int i=0; i<2; i++) {
-	    try {
-		b = inputFileStream.read();
-	    } catch (Exception e) {
-		logger.severe("Failed to read Int16");
-		return -1;
-	    }
-	    ret = ret + b * factor;
-	    factor = factor * 256;
-	}
-	return ret;
+	return IO.readInt16(inputFileStream);
     }
 
     private String readString(int len) {
