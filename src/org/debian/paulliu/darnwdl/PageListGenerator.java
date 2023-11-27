@@ -31,20 +31,25 @@ public class PageListGenerator {
 
     public java.util.ArrayList <org.debian.paulliu.darnwdl.Page> getPageList() {
 	ArrayList<org.debian.paulliu.darnwdl.Page> ret = new ArrayList<org.debian.paulliu.darnwdl.Page>();
-	org.debian.paulliu.darnwdl.Page page1 = new org.debian.paulliu.darnwdl.Page(indexList);
-	page1.setStartIndex(0);
-	for (int i=0; i<indexList.size(); i++) {
+	for (int i=0; i<indexList.size(); ) {
 	    org.debian.paulliu.darnwdl.wdlo.Index index1;
-	    page1.setEndIndex(i);
+	    org.debian.paulliu.darnwdl.Page page1;
+	    int j;
 	    index1 = indexList.get(i);
-	    if (index1.getTag().compareTo("R2") == 0) {
-		ret.add(page1);
-		page1 = new org.debian.paulliu.darnwdl.Page(indexList);
-		page1.setStartIndex(i+1);
+	    if (index1.getTag() == null || index1.getTag().compareTo("R2") != 0) {
+		i++;
+		continue;
 	    }
-	}
-	if (page1.getStartIndex() <= page1.getEndIndex()) {
+	    for (j=i+1; j<indexList.size(); j++) {
+		if (indexList.get(j).getTag() == null || indexList.get(j).getTag().compareTo("R2") == 0) {
+		    break;
+		}
+	    }
+	    page1 = new org.debian.paulliu.darnwdl.Page(indexList);
+	    page1.setStartIndex(i+1);
+	    page1.setEndIndex(j-1);
 	    ret.add(page1);
+	    i=j;
 	}
 
 	return ret;

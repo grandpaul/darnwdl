@@ -126,9 +126,28 @@ public class Main {
 	    for (org.debian.paulliu.darnwdl.wdlo.Index i : indexList) {
 		if (i.getTag() != null) {
 		    System.out.println(String.format("%1$s: %2$d", i.getTag(), i.getFilePointer()));
+		    if (i.getTag().compareTo("R2") == 0) {
+			org.debian.paulliu.darnwdl.wdlo.R2 r2 = new org.debian.paulliu.darnwdl.wdlo.R2(i);
+			System.out.println(String.format(" unknown: %1$d", r2.getUnknownShort()));
+		    } else if (i.getTag().compareTo("FT") == 0) {
+			org.debian.paulliu.darnwdl.wdlo.FT ft = new org.debian.paulliu.darnwdl.wdlo.FT(i);
+			System.out.println(String.format(" index: %1$d", ft.getIndex()));
+		    }
 		} else {
 		    System.out.println(String.format("special %1$d: %2$d", i.getSpecialByte(), i.getFilePointer()));
 		}
+	    }
+	    return;
+	}
+	if (args.length >= 2 && args[0].equals("pages")) {
+	    java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.INFO);
+	    java.io.File inputFile = new File(args[1]);
+	    WPass2 wpass2 = new WPass2(inputFile);
+	    java.util.ArrayList <org.debian.paulliu.darnwdl.wdlo.Index> indexList = wpass2.getIndexList();
+	    org.debian.paulliu.darnwdl.PageListGenerator pageListGenerator = new org.debian.paulliu.darnwdl.PageListGenerator (indexList);
+	    java.util.ArrayList <org.debian.paulliu.darnwdl.Page> pageList = pageListGenerator.getPageList();
+	    for (org.debian.paulliu.darnwdl.Page i : pageList) {
+		System.out.println(String.format("%1$d %2$d", i.getStartIndex(), i.getEndIndex()));
 	    }
 	    return;
 	}

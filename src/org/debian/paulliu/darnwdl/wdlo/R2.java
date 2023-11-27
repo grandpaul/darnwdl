@@ -27,7 +27,7 @@ public class R2 extends org.debian.paulliu.darnwdl.wdlo.Index {
 	return unknownShort;
     }
 
-    public void loadDataFromFile() {
+    private void loadDataFromFile() {
 	try {
 	    java.io.RandomAccessFile inputFile = getInputFile();
 	    byte[] tagBuf = new byte[2];
@@ -41,5 +41,6 @@ public class R2 extends org.debian.paulliu.darnwdl.wdlo.Index {
     public R2(org.debian.paulliu.darnwdl.wdlo.Index index1) {
 	super(index1.getTag(), index1.getFilePointer(), index1.getInputFile());
 	super.setSpecialByte(index1.getSpecialByte());
+	loadDataFromFile();
     }
 }

@@ -23,11 +23,14 @@ public class FT extends org.debian.paulliu.darnwdl.wdlo.Index {
 
     private long index;
 
+    /**
+     * Get FT's index
+     */
     public long getIndex() {
 	return index;
     }
 
-    public void loadDataFromFile() {
+    private void loadDataFromFile() {
 	try {
 	    java.io.RandomAccessFile inputFile = getInputFile();
 	    byte[] tagBuf = new byte[2];
@@ -41,6 +44,7 @@ public class FT extends org.debian.paulliu.darnwdl.wdlo.Index {
     public FT(org.debian.paulliu.darnwdl.wdlo.Index index1) {
 	super(index1.getTag(), index1.getFilePointer(), index1.getInputFile());
 	super.setSpecialByte(index1.getSpecialByte());
+	loadDataFromFile();
     }
     
 }
