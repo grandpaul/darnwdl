@@ -22,7 +22,6 @@ package org.debian.paulliu.darnwdl.wdlo;
 public class FT extends org.debian.paulliu.darnwdl.wdlo.Index {
 
     private long index;
-    private java.io.RandomAccessFile inputFile;
 
     public long getIndex() {
 	return index;
@@ -30,14 +29,17 @@ public class FT extends org.debian.paulliu.darnwdl.wdlo.Index {
 
     public void loadDataFromFile() {
 	try {
+	    java.io.RandomAccessFile inputFile = getInputFile();
+	    byte[] tagBuf = new byte[2];
 	    inputFile.seek(getFilePointer());
+	    inputFile.read(tagBuf);
+	    index = org.debian.paulliu.darnwdl.IO.readInt32(inputFile);
 	} catch (java.io.IOException e) {
 	}
     }
     
-    public FT(org.debian.paulliu.darnwdl.wdlo.Index index1, java.io.RandomAccessFile inputFile) {
-	super(index1.getTag(), index1.getFilePointer());
-	this.inputFile = inputFile;
+    public FT(org.debian.paulliu.darnwdl.wdlo.Index index1) {
+	super(index1.getTag(), index1.getFilePointer(), index1.getInputFile());
 	super.setSpecialByte(index1.getSpecialByte());
     }
     

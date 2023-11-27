@@ -19,34 +19,27 @@
 
 package org.debian.paulliu.darnwdl.wdlo;
 
-public class Index {
-    private String tag;
-    private long filePointer;
-    private java.io.RandomAccessFile inputFile;
-    private byte specialByte;
+public class R2 extends org.debian.paulliu.darnwdl.wdlo.Index {
 
-    public String getTag() {
-	return tag;
+    private int unknownShort;
+
+    public int getUnknownShort() {
+	return unknownShort;
     }
 
-    public long getFilePointer() {
-	return filePointer;
-    }
-
-    public void setSpecialByte(byte specialByte) {
-	this.specialByte = specialByte;
-    }
-    public byte getSpecialByte() {
-	return specialByte;
-    }
-
-    public java.io.RandomAccessFile getInputFile() {
-	return inputFile;
+    public void loadDataFromFile() {
+	try {
+	    java.io.RandomAccessFile inputFile = getInputFile();
+	    byte[] tagBuf = new byte[2];
+	    inputFile.seek(getFilePointer());
+	    inputFile.read(tagBuf);
+	    unknownShort = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);
+	} catch (java.io.IOException e) {
+	}
     }
     
-    public Index (String tag, long filePointer, java.io.RandomAccessFile inputFile) {
-	this.tag = tag;
-	this.filePointer = filePointer;
-	this.inputFile = inputFile;
+    public R2(org.debian.paulliu.darnwdl.wdlo.Index index1) {
+	super(index1.getTag(), index1.getFilePointer(), index1.getInputFile());
+	super.setSpecialByte(index1.getSpecialByte());
     }
 }

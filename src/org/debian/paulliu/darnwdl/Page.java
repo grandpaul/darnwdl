@@ -1,6 +1,6 @@
 /* 
-   WDL decompressor
-   Copyright (C) 2005-2007 Ying-Chun Liu (PaulLiu)
+   WDL decompressed data parser
+   Copyright (C) 2005-2007 Ying-Chun Liu (PaulLiu) 
    Copyright (C) 2006 Dan Jacobson http://jidanni.org/
 
     This program is free software: you can redistribute it and/or modify
@@ -17,36 +17,32 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package org.debian.paulliu.darnwdl.wdlo;
+package org.debian.paulliu.darnwdl;
 
-public class Index {
-    private String tag;
-    private long filePointer;
-    private java.io.RandomAccessFile inputFile;
-    private byte specialByte;
+public class Page {
+    private int startIndex;
+    private int endIndex;
+    private java.util.ArrayList <org.debian.paulliu.darnwdl.wdlo.Index> indexList;
 
-    public String getTag() {
-	return tag;
+    public void setStartIndex(int startIndex) {
+	this.startIndex = startIndex;
+    }
+    public int getStartIndex() {
+	return startIndex;
     }
 
-    public long getFilePointer() {
-	return filePointer;
+    public void setEndIndex(int endIndex) {
+	this.endIndex = endIndex;
+    }
+    public int getEndIndex() {
+	return endIndex;
     }
 
-    public void setSpecialByte(byte specialByte) {
-	this.specialByte = specialByte;
-    }
-    public byte getSpecialByte() {
-	return specialByte;
+    public Page(java.util.ArrayList <org.debian.paulliu.darnwdl.wdlo.Index> indexList) {
+	this.indexList = indexList;
+	this.startIndex = 0;
+	this.endIndex = 0;
     }
 
-    public java.io.RandomAccessFile getInputFile() {
-	return inputFile;
-    }
     
-    public Index (String tag, long filePointer, java.io.RandomAccessFile inputFile) {
-	this.tag = tag;
-	this.filePointer = filePointer;
-	this.inputFile = inputFile;
-    }
 }

@@ -31,12 +31,16 @@ import java.util.*;
 
 public class MainWindow extends JFrame {
     private java.util.logging.Logger logger = null;
+    private JPanel drawPanel = null;
+    private JScrollPane drawPanelScrollPane = null;
 
     public MainWindow() {
 	super("darnwdl");
-	init();
 
 	this.logger = java.util.logging.Logger.getLogger(org.debian.paulliu.darnwdl.Main.loggerName);
+
+	init();
+
     }
 
     private class MenuFileOpenActionListener implements ActionListener {
@@ -59,6 +63,22 @@ public class MainWindow extends JFrame {
 	}
     }
 
+    private class ToolboxButtonQuitActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    logger.info("Toolbox Quit");
+	    stop();
+	    System.exit(0);
+	}
+    }
+
+    
+    /**
+     * Create menu item
+     *
+     * @param text The text of the button
+     * @param iconName the icon of the button
+     * @return the menu item
+     */
     private JMenuItem createMenuItem(String text, String iconName) {
 	Icon icon = null;
 	JMenuItem ret = null;
@@ -73,6 +93,13 @@ public class MainWindow extends JFrame {
 	return ret;
     }
 
+    /**
+     * Create menu bar
+     *
+     * This function creates the menu bar for this app.
+     *
+     * @return the menu bar.
+     */
     private JMenuBar createMenuBar() {
 	JMenuBar jMenuBar = new JMenuBar();
 	JMenu jMenu_File = new JMenu("File");
@@ -135,6 +162,31 @@ public class MainWindow extends JFrame {
 	}
     }
 
+    private class MainWindowComponentListener extends java.awt.event.ComponentAdapter {
+	@Override
+	public void componentResized(ComponentEvent e) {
+	    if (logger != null) {
+		logger.info("Resized to " + e.getComponent().getSize());
+	    }
+	}
+	@Override
+	public void componentMoved(ComponentEvent e) {
+	    if (logger != null) {
+		logger.info("Moved to " + e.getComponent().getLocation());
+	    }
+	}
+    }
+
+    /**
+     * Create the Button for Tool Box
+     *
+     * There is a row of Tool Box in the GUI. This functions creates
+     * the button of the tool box
+     *
+     * @param text The text of the button
+     * @param iconName the icon of the button
+     * @return the button
+     */
     private javax.swing.JButton createToolBoxButton(String text, String iconName) {
 	javax.swing.JButton ret = null;
 	Icon icon = null;
@@ -170,6 +222,7 @@ public class MainWindow extends JFrame {
 	this.setVisible(true);
 	
         this.addWindowListener(new MainWindowListener());
+	this.addComponentListener(new MainWindowComponentListener());
 
 	this.setJMenuBar(createMenuBar());
 
@@ -210,8 +263,15 @@ public class MainWindow extends JFrame {
 	toolBox.add(toolBoxButton_Back);
 	toolBox.add(toolBoxButton_Forward);
 	toolBox.add(toolBoxButton_Last);
+
+	toolBoxButton_Quit.addActionListener(new ToolboxButtonQuitActionListener());
 	
 	cp.add(toolBox, BorderLayout.NORTH);
+
+	drawPanel = new JPanel();
+	drawPanelScrollPane = new JScrollPane(drawPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+	cp.add(drawPanelScrollPane, BorderLayout.CENTER);
 
 	panel.revalidate();
     }

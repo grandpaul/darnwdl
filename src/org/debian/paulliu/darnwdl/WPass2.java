@@ -70,12 +70,12 @@ public class WPass2 {
 		org.debian.paulliu.darnwdl.wdlo.Index wdloIndex;
 		inputFileStream.read(tagBuf);
 		if (tagBuf[1] == 0) {
-		    wdloIndex = new org.debian.paulliu.darnwdl.wdlo.Index(tag, inputFileStream.getFilePointer()-2);
+		    wdloIndex = new org.debian.paulliu.darnwdl.wdlo.Index(tag, inputFileStream.getFilePointer()-2, inputFileStream);
 		    wdloIndex.setSpecialByte(tagBuf[0]);
 		    tag = "special";
 		} else {
 		    tag = new String(tagBuf, java.nio.charset.StandardCharsets.UTF_8);
-		    wdloIndex = new org.debian.paulliu.darnwdl.wdlo.Index(tag, inputFileStream.getFilePointer()-2);
+		    wdloIndex = new org.debian.paulliu.darnwdl.wdlo.Index(tag, inputFileStream.getFilePointer()-2, inputFileStream);
 		}
 		indexList.add(wdloIndex);
 
