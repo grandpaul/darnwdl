@@ -132,6 +132,26 @@ public class Main {
 		    } else if (i.getTag().compareTo("FT") == 0) {
 			org.debian.paulliu.darnwdl.wdlo.FT ft = new org.debian.paulliu.darnwdl.wdlo.FT(i);
 			System.out.println(String.format(" index: %1$d", ft.getIndex()));
+		    } else if (i.getTag().compareTo("ET") == 0 || i.getTag().compareTo("EU") == 0) {
+			org.debian.paulliu.darnwdl.wdlo.ET et = new org.debian.paulliu.darnwdl.wdlo.ET(i);
+			java.util.ArrayList<org.debian.paulliu.darnwdl.wdlo.ET.ETData> etDataList = et.getETDataList();
+			java.io.StringWriter sw = new java.io.StringWriter();
+			for (org.debian.paulliu.darnwdl.wdlo.ET.ETData etData : etDataList) {
+			    sw.write("{");
+			    sw.write(String.format("x: %1$d, ", etData.x));
+			    sw.write(String.format("y: %1$d, ", etData.y));
+			    sw.write(String.format("flag1: 0x%1$x, ", etData.flag1));
+			    if ((etData.flag1 & 0x02) != 0) {
+				sw.write("flag1_0x2_width: [");
+				for (Integer width1 : etData.flag1_0x2_width) {
+				    sw.write(width1.toString());
+				    sw.write(", ");
+				}
+				sw.write("], ");
+			    }
+			    sw.write("}, ");
+			}
+			System.out.println(" etdata: "+sw.toString());
 		    }
 		} else {
 		    System.out.println(String.format("special %1$d: %2$d", i.getSpecialByte(), i.getFilePointer()));

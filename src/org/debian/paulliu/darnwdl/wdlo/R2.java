@@ -21,6 +21,7 @@ package org.debian.paulliu.darnwdl.wdlo;
 
 public class R2 extends org.debian.paulliu.darnwdl.wdlo.Index {
 
+    private java.util.logging.Logger logger;
     private int unknownShort;
 
     public int getUnknownShort() {
@@ -35,12 +36,14 @@ public class R2 extends org.debian.paulliu.darnwdl.wdlo.Index {
 	    inputFile.read(tagBuf);
 	    unknownShort = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);
 	} catch (java.io.IOException e) {
+	    logger.severe("java.io.IOException: "+e.toString());
 	}
     }
     
     public R2(org.debian.paulliu.darnwdl.wdlo.Index index1) {
 	super(index1.getTag(), index1.getFilePointer(), index1.getInputFile());
 	super.setSpecialByte(index1.getSpecialByte());
+	this.logger = java.util.logging.Logger.getLogger(org.debian.paulliu.darnwdl.Main.loggerName);
 	loadDataFromFile();
     }
 }
