@@ -140,10 +140,11 @@ public class Main {
 			    sw.write("{");
 			    sw.write(String.format("x: %1$d, ", etData.x));
 			    sw.write(String.format("y: %1$d, ", etData.y));
+			    sw.write(String.format("string: %1$s, ", etData.getString("big5")));
 			    sw.write(String.format("flag1: 0x%1$x, ", etData.flag1));
 			    if ((etData.flag1 & 0x02) != 0) {
 				sw.write("flag1_0x2_width: [");
-				for (Integer width1 : etData.flag1_0x2_width) {
+				for (Integer width1 : etData.getWidth()) {
 				    sw.write(width1.toString());
 				    sw.write(", ");
 				}

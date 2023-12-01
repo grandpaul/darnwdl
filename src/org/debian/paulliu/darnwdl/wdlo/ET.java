@@ -33,6 +33,9 @@ public class ET extends org.debian.paulliu.darnwdl.wdlo.Index {
 	public int flag1_0x1_y2;
 	public java.util.ArrayList<Integer> flag1_0x2_width;
 
+	private String string_S;
+	private java.util.ArrayList<Integer> string_Width;
+
 	public ETData() {
 	    x = 0;
 	    y = 0;
@@ -44,6 +47,72 @@ public class ET extends org.debian.paulliu.darnwdl.wdlo.Index {
 	    flag1_0x1_x2 = 0;
 	    flag1_0x1_y2 = 0;
 	    flag1_0x2_width = new java.util.ArrayList<Integer>();
+	    string_S = null;
+	    string_Width = null;
+	}
+
+	/**
+	 * get String that stored in this ETData structure
+	 *
+	 * @param encoding encoding of the ETData
+	 * @return String encoded by encoding
+	 */
+	public String getString(String encoding) {
+	    if (this.string_S != null) {
+		return this.string_S;
+	    }
+
+	    java.util.ArrayList<Integer> width = new java.util.ArrayList<Integer> ();
+	    java.nio.charset.Charset charSet = null;
+	    try {
+		charSet = java.nio.charset.Charset.forName(encoding);
+	    } catch (java.nio.charset.IllegalCharsetNameException e) {
+		logger.severe("conver string error: "+e.toString());
+	    } catch (java.lang.IllegalArgumentException e) {
+		logger.severe("conver string error: "+e.toString());
+	    }
+	    if (charSet == null) {
+		return null;
+	    }
+
+	    java.io.StringWriter sw = new java.io.StringWriter();
+	    
+	    for (int i=0; i<this.stringLen; i++) {
+		Integer width1 = flag1_0x2_width.get(i);
+		if ((this.string[i] & 0x80) != 0) {
+		    byte[] buf1 = null;
+		    if (i+1 < this.stringLen) {
+			buf1 = new byte[2];
+			buf1[0] = this.string[i];
+			buf1[1] = this.string[i+1];
+			i++;
+		    } else {
+			buf1 = new byte[1];
+			buf1[0] = this.string[i];
+		    }
+		    String s1 = new String(buf1, charSet);
+		    if (s1.length() != 1) {
+			logger.warning("String encoding conversion error because the length should be 1 here");
+		    }
+		    sw.write(s1);
+		} else {
+		    byte[] buf1 = new byte[1];
+		    buf1[0] = this.string[i];
+		    String s1 = new String(buf1, charSet);
+		    if (s1.length() != 1) {
+			logger.warning("String encoding conversion error because the length should be 1 here");
+		    }
+		    sw.write(s1);
+		}
+		width.add(width1);
+	    }
+	    this.string_S = sw.toString();
+	    this.string_Width = width;
+	    return this.string_S;
+	}
+
+	public java.util.ArrayList<Integer> getWidth() {
+	    return this.string_Width;
 	}
     }
 
