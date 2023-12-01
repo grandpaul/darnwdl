@@ -19,6 +19,10 @@
 
 package org.debian.paulliu.darnwdl.wdlo;
 
+/**
+ * This class is describing Font.
+ * The index reference an SP01 structure.
+ */
 public class FT extends org.debian.paulliu.darnwdl.wdlo.Index {
 
     private java.util.logging.Logger logger;
@@ -44,12 +48,10 @@ public class FT extends org.debian.paulliu.darnwdl.wdlo.Index {
     }
     
     public FT(org.debian.paulliu.darnwdl.wdlo.Index index1) {
-	super(index1.getTag(), index1.getFilePointer(), index1.getInputFile());
+	super(index1.getTag(), index1.getFilePointer(), index1.getWPass2());
 	super.setSpecialByte(index1.getSpecialByte());
 	this.logger = java.util.logging.Logger.getLogger(org.debian.paulliu.darnwdl.Main.loggerName);
 	loadDataFromFile();
     }
     
 }
-
-    

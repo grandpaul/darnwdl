@@ -23,19 +23,28 @@ import java.util.*;
 
 public class PageListGenerator {
 
-    private java.util.ArrayList <org.debian.paulliu.darnwdl.wdlo.Index> indexList;
+    private org.debian.paulliu.darnwdl.WPass2 wPass2;
 
-    public PageListGenerator(java.util.ArrayList <org.debian.paulliu.darnwdl.wdlo.Index> indexList) {
-	this.indexList = indexList;
+    public PageListGenerator(org.debian.paulliu.darnwdl.WPass2 wPass2) {
+	this.wPass2 = wPass2;
+    }
+
+    public org.debian.paulliu.darnwdl.WPass2 getWPass2() {
+	return wPass2;
     }
 
     public java.util.ArrayList <org.debian.paulliu.darnwdl.Page> getPageList() {
+	int firstSPTagIndex=-1;
 	ArrayList<org.debian.paulliu.darnwdl.Page> ret = new ArrayList<org.debian.paulliu.darnwdl.Page>();
-	for (int i=0; i<indexList.size(); ) {
+	java.util.ArrayList <org.debian.paulliu.darnwdl.wdlo.Index> indexList = wPass2.getIndexList();
+	for (int i=0; i<wPass2.getIndexList().size(); ) {
 	    org.debian.paulliu.darnwdl.wdlo.Index index1;
 	    org.debian.paulliu.darnwdl.Page page1;
 	    int j;
 	    index1 = indexList.get(i);
+	    if (firstSPTagIndex == -1 && index1.getTag() == null) {
+		firstSPTagIndex = i;
+	    }
 	    if (index1.getTag() == null || index1.getTag().compareTo("R2") != 0) {
 		i++;
 		continue;
@@ -45,11 +54,16 @@ public class PageListGenerator {
 		    break;
 		}
 	    }
-	    page1 = new org.debian.paulliu.darnwdl.Page(indexList);
+	    page1 = new org.debian.paulliu.darnwdl.Page(this);
 	    page1.setStartIndex(i+1);
 	    page1.setEndIndex(j-1);
 	    ret.add(page1);
 	    i=j;
+	}
+	if (firstSPTagIndex != -1) {
+	    for (org.debian.paulliu.darnwdl.Page p1 : ret) {
+		p1.setFirstSPTagIndex(firstSPTagIndex);
+	    }
 	}
 
 	return ret;

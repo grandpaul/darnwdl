@@ -20,15 +20,21 @@
 package org.debian.paulliu.darnwdl.wdlo;
 
 /**
- * R2 indicates a Page start
+ * This class is describing Clip Region
  */
-public class R2 extends org.debian.paulliu.darnwdl.wdlo.Index {
+public class CR extends org.debian.paulliu.darnwdl.wdlo.Index {
 
     private java.util.logging.Logger logger;
-    private int unknownShort;
 
-    public int getUnknownShort() {
-	return unknownShort;
+    private int x1;
+    private int y1;
+    private int x2;
+    private int y2;
+
+    public java.awt.Rectangle getRectangle() {
+	java.awt.Rectangle ret;
+	ret = new java.awt.Rectangle(x1, y1, x2-x1, y2-y1);
+	return ret;
     }
 
     private void loadDataFromFile() {
@@ -37,16 +43,20 @@ public class R2 extends org.debian.paulliu.darnwdl.wdlo.Index {
 	    byte[] tagBuf = new byte[2];
 	    inputFile.seek(getFilePointer());
 	    inputFile.read(tagBuf);
-	    unknownShort = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);
+	    x1 = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);
+	    y1 = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);
+	    x2 = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);
+	    y2 = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);
 	} catch (java.io.IOException e) {
 	    logger.severe("java.io.IOException: "+e.toString());
 	}
     }
     
-    public R2(org.debian.paulliu.darnwdl.wdlo.Index index1) {
+    public CR(org.debian.paulliu.darnwdl.wdlo.Index index1) {
 	super(index1.getTag(), index1.getFilePointer(), index1.getWPass2());
 	super.setSpecialByte(index1.getSpecialByte());
 	this.logger = java.util.logging.Logger.getLogger(org.debian.paulliu.darnwdl.Main.loggerName);
 	loadDataFromFile();
     }
+    
 }

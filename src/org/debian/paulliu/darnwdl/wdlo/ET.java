@@ -19,6 +19,10 @@
 
 package org.debian.paulliu.darnwdl.wdlo;
 
+
+/**
+ * This class is for Big5 or GB2312 encoded text
+ */
 public class ET extends org.debian.paulliu.darnwdl.wdlo.Index {
 
     public class ETData {
@@ -176,7 +180,7 @@ public class ET extends org.debian.paulliu.darnwdl.wdlo.Index {
     }
     
     public ET(org.debian.paulliu.darnwdl.wdlo.Index index1) {
-	super(index1.getTag(), index1.getFilePointer(), index1.getInputFile());
+	super(index1.getTag(), index1.getFilePointer(), index1.getWPass2());
 	super.setSpecialByte(index1.getSpecialByte());
 	this.logger = java.util.logging.Logger.getLogger(org.debian.paulliu.darnwdl.Main.loggerName);
 	loadDataFromFile();

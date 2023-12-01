@@ -153,6 +153,9 @@ public class Main {
 			    sw.write("}, ");
 			}
 			System.out.println(" etdata: "+sw.toString());
+		    } else if (i.getTag().compareTo("CR") == 0) {
+			org.debian.paulliu.darnwdl.wdlo.CR cr = new org.debian.paulliu.darnwdl.wdlo.CR(i);
+			System.out.println(String.format(" rectangle: %1$s", cr.getRectangle().toString()));
 		    }
 		} else {
 		    System.out.println(String.format("special %1$d: %2$d", i.getSpecialByte(), i.getFilePointer()));
@@ -163,9 +166,8 @@ public class Main {
 	if (args.length >= 2 && args[0].equals("pages")) {
 	    java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.INFO);
 	    java.io.File inputFile = new File(args[1]);
-	    WPass2 wpass2 = new WPass2(inputFile);
-	    java.util.ArrayList <org.debian.paulliu.darnwdl.wdlo.Index> indexList = wpass2.getIndexList();
-	    org.debian.paulliu.darnwdl.PageListGenerator pageListGenerator = new org.debian.paulliu.darnwdl.PageListGenerator (indexList);
+	    WPass2 wPass2 = new WPass2(inputFile);
+	    org.debian.paulliu.darnwdl.PageListGenerator pageListGenerator = new org.debian.paulliu.darnwdl.PageListGenerator (wPass2);
 	    java.util.ArrayList <org.debian.paulliu.darnwdl.Page> pageList = pageListGenerator.getPageList();
 	    for (org.debian.paulliu.darnwdl.Page i : pageList) {
 		System.out.println(String.format("%1$d %2$d", i.getStartIndex(), i.getEndIndex()));

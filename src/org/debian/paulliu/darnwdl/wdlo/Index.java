@@ -22,8 +22,8 @@ package org.debian.paulliu.darnwdl.wdlo;
 public class Index {
     private String tag;
     private long filePointer;
-    private java.io.RandomAccessFile inputFile;
     private byte specialByte;
+    private org.debian.paulliu.darnwdl.WPass2 wPass2;
 
     public String getTag() {
 	return tag;
@@ -40,13 +40,17 @@ public class Index {
 	return specialByte;
     }
 
+    public org.debian.paulliu.darnwdl.WPass2 getWPass2() {
+	return this.wPass2;
+    }
+
     public java.io.RandomAccessFile getInputFile() {
-	return inputFile;
+	return wPass2.getInputFile();
     }
     
-    public Index (String tag, long filePointer, java.io.RandomAccessFile inputFile) {
+    public Index (String tag, long filePointer, org.debian.paulliu.darnwdl.WPass2 wPass2) {
 	this.tag = tag;
 	this.filePointer = filePointer;
-	this.inputFile = inputFile;
+	this.wPass2 = wPass2;
     }
 }
