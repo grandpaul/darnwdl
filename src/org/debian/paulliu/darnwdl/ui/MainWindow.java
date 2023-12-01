@@ -31,8 +31,9 @@ import java.util.*;
 
 public class MainWindow extends JFrame {
     private java.util.logging.Logger logger = null;
-    private JPanel drawPanel = null;
+    private org.debian.paulliu.darnwdl.ui.DrawPanel drawPanel = null;
     private JScrollPane drawPanelScrollPane = null;
+    private JLabel statusBar = null;
 
     public MainWindow() {
 	super("darnwdl");
@@ -165,8 +166,16 @@ public class MainWindow extends JFrame {
     private class MainWindowComponentListener extends java.awt.event.ComponentAdapter {
 	@Override
 	public void componentResized(ComponentEvent e) {
-	    if (logger != null) {
+	    /* We can get the width and height of the viewPort's size.
+	       So that FitH and FitW works */
+	    double viewPortWidth = 0;
+	    double viewPortHeight = 0;
+	    if (drawPanelScrollPane != null && logger != null) {
+		Rectangle r1 = drawPanelScrollPane.getViewport().getViewRect();
 		logger.info("Resized to " + e.getComponent().getSize());
+		logger.info("Rectangle: " + r1.toString());
+		viewPortWidth = r1.getWidth();
+		viewPortHeight = r1.getHeight();
 	    }
 	}
 	@Override
@@ -222,7 +231,7 @@ public class MainWindow extends JFrame {
 	this.setVisible(true);
 	
         this.addWindowListener(new MainWindowListener());
-	this.addComponentListener(new MainWindowComponentListener());
+	//this.addComponentListener(new MainWindowComponentListener());
 
 	this.setJMenuBar(createMenuBar());
 
@@ -268,10 +277,16 @@ public class MainWindow extends JFrame {
 	
 	cp.add(toolBox, BorderLayout.NORTH);
 
-	drawPanel = new JPanel();
+	drawPanel = new org.debian.paulliu.darnwdl.ui.DrawPanel();
 	drawPanelScrollPane = new JScrollPane(drawPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
+	drawPanelScrollPane.addComponentListener(new MainWindowComponentListener());
+	//drawPanel.addComponentListener(new MainWindowComponentListener());
+
 	cp.add(drawPanelScrollPane, BorderLayout.CENTER);
+
+	statusBar = new JLabel(" ");
+	cp.add(statusBar, BorderLayout.SOUTH);
 
 	panel.revalidate();
     }
