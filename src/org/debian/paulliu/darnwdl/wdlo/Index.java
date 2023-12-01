@@ -24,6 +24,7 @@ public class Index {
     private long filePointer;
     private byte specialByte;
     private org.debian.paulliu.darnwdl.WPass2 wPass2;
+    private java.util.HashMap < String , Integer > referenceMap;
 
     public String getTag() {
 	return tag;
@@ -46,6 +47,23 @@ public class Index {
 
     public java.io.RandomAccessFile getInputFile() {
 	return wPass2.getInputFile();
+    }
+
+    public void setReference(String tag, int index) {
+	if (referenceMap == null) {
+	    referenceMap = new java.util.HashMap < String , Integer > ();
+	}
+	referenceMap.put(tag, Integer.valueOf(index));
+    }
+
+    public int getReference(String tag) {
+	if (referenceMap == null) {
+	    return -1;
+	}
+	if (!referenceMap.containsKey(tag)) {
+	    return -1;
+	}
+	return referenceMap.get(tag).intValue();
     }
     
     public Index (String tag, long filePointer, org.debian.paulliu.darnwdl.WPass2 wPass2) {

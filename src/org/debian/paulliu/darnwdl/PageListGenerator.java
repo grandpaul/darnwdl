@@ -34,7 +34,6 @@ public class PageListGenerator {
     }
 
     public java.util.ArrayList <org.debian.paulliu.darnwdl.Page> getPageList() {
-	int firstSPTagIndex=-1;
 	ArrayList<org.debian.paulliu.darnwdl.Page> ret = new ArrayList<org.debian.paulliu.darnwdl.Page>();
 	java.util.ArrayList <org.debian.paulliu.darnwdl.wdlo.Index> indexList = wPass2.getIndexList();
 	for (int i=0; i<wPass2.getIndexList().size(); ) {
@@ -42,9 +41,6 @@ public class PageListGenerator {
 	    org.debian.paulliu.darnwdl.Page page1;
 	    int j;
 	    index1 = indexList.get(i);
-	    if (firstSPTagIndex == -1 && index1.getTag() == null) {
-		firstSPTagIndex = i;
-	    }
 	    if (index1.getTag() == null || index1.getTag().compareTo("R2") != 0) {
 		i++;
 		continue;
@@ -59,11 +55,6 @@ public class PageListGenerator {
 	    page1.setEndIndex(j-1);
 	    ret.add(page1);
 	    i=j;
-	}
-	if (firstSPTagIndex != -1) {
-	    for (org.debian.paulliu.darnwdl.Page p1 : ret) {
-		p1.setFirstSPTagIndex(firstSPTagIndex);
-	    }
 	}
 
 	return ret;

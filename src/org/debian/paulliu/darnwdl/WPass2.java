@@ -24,6 +24,7 @@ public class WPass2 {
     private java.io.RandomAccessFile inputFileStream;
     private java.util.logging.Logger logger = null;
     private java.util.ArrayList <org.debian.paulliu.darnwdl.wdlo.Index> indexList;
+    private int firstSPTagIndex = -1;
 
     private long readInt32() {
 	return IO.readInt32(inputFileStream);
@@ -63,6 +64,9 @@ public class WPass2 {
 	    return false;
 	}
 
+	int lastFT = -1;
+	int lastTC = -1;
+	
 	byte[] tagBuf = new byte[2];
 	try {
 	    while (inputFileStream.getFilePointer() < inputFileStream.length()) {
@@ -81,6 +85,7 @@ public class WPass2 {
 
 		if (tag.compareTo("FT") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 4);
+		    lastFT = indexList.size()-1;
 		} else if (tag.compareTo("BC") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 4);
 		} else if (tag.compareTo("BM") == 0) {
@@ -89,6 +94,7 @@ public class WPass2 {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 4);
 		} else if (tag.compareTo("TC") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 4);
+		    lastTC = indexList.size()-1;
 		} else if (tag.compareTo("PN") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 4);
 		} else if (tag.compareTo("R2") == 0) {
@@ -102,9 +108,22 @@ public class WPass2 {
 		} else if (tag.compareTo("ET") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
+		    if (lastFT != -1) {
+			wdloIndex.setReference("FT", lastFT);
+		    }
+		    if (lastTC != -1) {
+			wdloIndex.setReference("TC", lastTC);
+		    }
+			
 		} else if (tag.compareTo("EU") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
+		    if (lastFT != -1) {
+			wdloIndex.setReference("FT", lastFT);
+		    }
+		    if (lastTC != -1) {
+			wdloIndex.setReference("TC", lastTC);
+		    }
 		} else if (tag.compareTo("FR") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
@@ -161,13 +180,25 @@ public class WPass2 {
 		} else if (tag.compareTo("UT") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
+		    if (lastFT != -1) {
+			wdloIndex.setReference("FT", lastFT);
+		    }
+		    if (lastTC != -1) {
+			wdloIndex.setReference("TC", lastTC);
+		    }
 		} else if (tagBuf[1] == 0) {
 		    long seeklen = readInt32();
+		    if (firstSPTagIndex == -1) {
+			firstSPTagIndex = indexList.size()-1;
+		    }
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
 		} else {
 		    logger.warning(String.format("Please report bugs: Unknown tag %1$s", tag));
 		    inputFileStream.seek(inputFileStream.getFilePointer() - 1);
 		}
+	    }
+	    if (firstSPTagIndex == -1) {
+		firstSPTagIndex = 0;
 	    }
 	} catch (java.io.IOException e) {
 	}
@@ -180,6 +211,10 @@ public class WPass2 {
 
     public java.io.RandomAccessFile getInputFile() {
 	return inputFileStream;
+    }
+
+    public int getFirstSPTagIndex() {
+	return firstSPTagIndex;
     }
 
     public WPass2(java.io.File inputFile) {

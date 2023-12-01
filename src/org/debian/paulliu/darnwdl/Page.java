@@ -23,7 +23,6 @@ public class Page {
     private double renderFactor = 1.0/14.0;
     private int startIndex;
     private int endIndex;
-    private int firstSPTagIndex;
     private org.debian.paulliu.darnwdl.PageListGenerator pageListGenerator;
 
     public void setStartIndex(int startIndex) {
@@ -40,11 +39,8 @@ public class Page {
 	return endIndex;
     }
 
-    public void setFirstSPTagIndex(int firstSPTagIndex) {
-	this.firstSPTagIndex = firstSPTagIndex;
-    }
     public int getFirstSPTagIndex() {
-	return firstSPTagIndex;
+	return this.pageListGenerator.getWPass2().getFirstSPTagIndex();
     }
 
     public java.awt.Image render() {
@@ -70,7 +66,6 @@ public class Page {
 	this.pageListGenerator = pageListGenerator;
 	this.startIndex = 0;
 	this.endIndex = 0;
-	this.firstSPTagIndex = -1;
     }
 
     
