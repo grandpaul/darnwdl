@@ -180,8 +180,7 @@ public class ET extends org.debian.paulliu.darnwdl.wdlo.Index {
     }
     
     public ET(org.debian.paulliu.darnwdl.wdlo.Index index1) {
-	super(index1.getTag(), index1.getFilePointer(), index1.getWPass2());
-	super.setSpecialByte(index1.getSpecialByte());
+	super(index1);
 	this.logger = java.util.logging.Logger.getLogger(org.debian.paulliu.darnwdl.Main.loggerName);
 	loadDataFromFile();
     }

@@ -23,18 +23,10 @@ package org.debian.paulliu.darnwdl.wdlo;
  * This class is describing Font.
  * The index reference an SP01 structure.
  */
-public class UF extends org.debian.paulliu.darnwdl.wdlo.Index {
+public class UF extends org.debian.paulliu.darnwdl.wdlo.SpecialTagReference {
 
     private java.util.logging.Logger logger;
     private int unknownShort;
-    private long index;
-
-    /**
-     * Get UF's index
-     */
-    public long getIndex() {
-	return index;
-    }
 
     public int getUnknownShort() {
 	return unknownShort;
@@ -47,15 +39,14 @@ public class UF extends org.debian.paulliu.darnwdl.wdlo.Index {
 	    inputFile.seek(getFilePointer());
 	    inputFile.read(tagBuf);
 	    unknownShort = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);
-	    index = org.debian.paulliu.darnwdl.IO.readInt32(inputFile);
+	    super.setFilePointerToSP(org.debian.paulliu.darnwdl.IO.readInt32(inputFile));
 	} catch (java.io.IOException e) {
 	    logger.severe("java.io.IOException: "+e.toString());
 	}
     }
     
     public UF(org.debian.paulliu.darnwdl.wdlo.Index index1) {
-	super(index1.getTag(), index1.getFilePointer(), index1.getWPass2());
-	super.setSpecialByte(index1.getSpecialByte());
+	super(index1);
 	this.logger = java.util.logging.Logger.getLogger(org.debian.paulliu.darnwdl.Main.loggerName);
 	loadDataFromFile();
     }

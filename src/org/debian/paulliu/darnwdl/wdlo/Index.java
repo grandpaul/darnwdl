@@ -50,9 +50,6 @@ public class Index {
     }
 
     public void setReference(String tag, int index) {
-	if (referenceMap == null) {
-	    referenceMap = new java.util.HashMap < String , Integer > ();
-	}
 	referenceMap.put(tag, Integer.valueOf(index));
     }
 
@@ -70,5 +67,15 @@ public class Index {
 	this.tag = tag;
 	this.filePointer = filePointer;
 	this.wPass2 = wPass2;
+	this.setSpecialByte((byte)0);
+	this.referenceMap = new java.util.HashMap < String , Integer > ();
+    }
+
+    public Index (org.debian.paulliu.darnwdl.wdlo.Index index1) {
+	this.tag = index1.getTag();
+	this.filePointer = index1.getFilePointer();
+	this.wPass2 = index1.getWPass2();
+	this.setSpecialByte (index1.getSpecialByte());
+	this.referenceMap = index1.referenceMap;
     }
 }

@@ -64,8 +64,17 @@ public class WPass2 {
 	    return false;
 	}
 
+	/* variable that stores attribute structures */
 	int lastFT = -1;
 	int lastTC = -1;
+	int lastBC = -1;
+	int lastPN = -1;
+	int lastBH = -1;
+	int lastUF = -1;
+	int lastCR = -1;
+
+	/* handle special tags index reference */
+	java.util.LinkedList<Integer> needSpecialStructure = new java.util.LinkedList<Integer> ();
 	
 	byte[] tagBuf = new byte[2];
 	try {
@@ -86,38 +95,52 @@ public class WPass2 {
 		if (tag.compareTo("FT") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 4);
 		    lastFT = indexList.size()-1;
+		    needSpecialStructure.add(Integer.valueOf(indexList.size()-1));
 		} else if (tag.compareTo("BC") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 4);
+		    lastBC = indexList.size()-1;
 		} else if (tag.compareTo("BM") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 2);
 		} else if (tag.compareTo("BH") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 4);
+		    lastBH = indexList.size()-1;
+		    needSpecialStructure.add(Integer.valueOf(indexList.size()-1));
 		} else if (tag.compareTo("TC") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 4);
 		    lastTC = indexList.size()-1;
 		} else if (tag.compareTo("PN") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 4);
+		    lastPN = indexList.size()-1;
+		    needSpecialStructure.add(Integer.valueOf(indexList.size()-1));
 		} else if (tag.compareTo("R2") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 2);
 		} else if (tag.compareTo("CT") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 2);
 		} else if (tag.compareTo("UF") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 6);
+		    lastUF = indexList.size()-1;
+		    needSpecialStructure.add(Integer.valueOf(indexList.size()-1));
 		} else if (tag.compareTo("CR") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 8);
+		    lastCR = indexList.size()-1;
 		} else if (tag.compareTo("ET") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
+		    if (lastCR != -1) {
+			wdloIndex.setReference("CR", lastCR);
+		    }
 		    if (lastFT != -1) {
 			wdloIndex.setReference("FT", lastFT);
 		    }
 		    if (lastTC != -1) {
 			wdloIndex.setReference("TC", lastTC);
 		    }
-			
 		} else if (tag.compareTo("EU") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
+		    if (lastCR != -1) {
+			wdloIndex.setReference("CR", lastCR);
+		    }
 		    if (lastFT != -1) {
 			wdloIndex.setReference("FT", lastFT);
 		    }
@@ -127,15 +150,27 @@ public class WPass2 {
 		} else if (tag.compareTo("FR") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
+		    if (lastCR != -1) {
+			wdloIndex.setReference("CR", lastCR);
+		    }
 		} else if (tag.compareTo("CP") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
 		} else if (tag.compareTo("PL") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
+		    if (lastCR != -1) {
+			wdloIndex.setReference("CR", lastCR);
+		    }
+		    if (lastPN != -1) {
+			wdloIndex.setReference("PN", lastPN);
+		    }
 		} else if (tag.compareTo("AP") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
+		    if (lastCR != -1) {
+			wdloIndex.setReference("CR", lastCR);
+		    }
 		} else if (tag.compareTo("AQ") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
@@ -152,6 +187,9 @@ public class WPass2 {
 		    long seeklen = readInt16();
 		    seeklen = readInt32();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
+		    if (lastCR != -1) {
+			wdloIndex.setReference("CR", lastCR);
+		    }
 		} else if (tag.compareTo("SD") == 0) {
 		    long seeklen = readInt16();
 		    if (seeklen != 0) {
@@ -171,6 +209,9 @@ public class WPass2 {
 			graphDataLen2 = readInt32();
 			inputFileStream.seek(inputFileStream.getFilePointer() + graphDataLen2);
 		    }
+		    if (lastCR != -1) {
+			wdloIndex.setReference("CR", lastCR);
+		    }
 		} else if (tag.compareTo("SX") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
@@ -180,6 +221,9 @@ public class WPass2 {
 		} else if (tag.compareTo("UT") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
+		    if (lastCR != -1) {
+			wdloIndex.setReference("CR", lastCR);
+		    }
 		    if (lastFT != -1) {
 			wdloIndex.setReference("FT", lastFT);
 		    }
@@ -197,10 +241,52 @@ public class WPass2 {
 		    inputFileStream.seek(inputFileStream.getFilePointer() - 1);
 		}
 	    }
-	    if (firstSPTagIndex == -1) {
-		firstSPTagIndex = 0;
-	    }
 	} catch (java.io.IOException e) {
+	    logger.severe(String.format("WPass2 error %1$s",e.toString()));
+	}
+	for (Integer i1 : needSpecialStructure) {
+	    int i = i1.intValue();
+	    org.debian.paulliu.darnwdl.wdlo.Index index1 = indexList.get(i);
+	    org.debian.paulliu.darnwdl.wdlo.SpecialTagReference sr1 = null;
+	    if (index1.getTag().compareTo("FT") == 0) {
+		sr1 = new org.debian.paulliu.darnwdl.wdlo.FT(index1);
+	    } else if (index1.getTag().compareTo("BH") == 0) {
+		sr1 = new org.debian.paulliu.darnwdl.wdlo.BH(index1);
+	    } else if (index1.getTag().compareTo("PN") == 0) {
+		sr1 = new org.debian.paulliu.darnwdl.wdlo.PN(index1);
+	    } else if (index1.getTag().compareTo("UF") == 0) {
+		sr1 = new org.debian.paulliu.darnwdl.wdlo.UF(index1);
+	    }
+	    for (int j=firstSPTagIndex; j>=0 && j<indexList.size(); j++) {
+		if (indexList.get(j).getTag() != null) {
+		    continue;
+		}
+		if (sr1.getFilePointerToSP() != indexList.get(j).getFilePointer() - indexList.get(firstSPTagIndex).getFilePointer()) {
+		    continue;
+		}
+		if (sr1.getTag().compareTo("FT") == 0 || sr1.getTag().compareTo("UF") == 0) {
+		    if (indexList.get(j).getSpecialByte() == 1) {
+			index1.setReference("Special 01", Integer.valueOf(j));
+			logger.info(String.format("Set tag %1$d %2$s reference %3$d Special %4$02x", i, index1.getTag(), j, indexList.get(j).getSpecialByte()));
+			break;
+		    }
+		} else if (sr1.getTag().compareTo("BH") == 0) {
+		    if (indexList.get(j).getSpecialByte() == 2) {
+			index1.setReference("Special 02", Integer.valueOf(j));
+			logger.info(String.format("Set tag %1$d %2$s reference %3$d Special %4$02x", i, index1.getTag(), j, indexList.get(j).getSpecialByte()));
+			break;
+		    }
+		}  else if (sr1.getTag().compareTo("PN") == 0) {
+		    if (indexList.get(j).getSpecialByte() == 3) {
+			index1.setReference("Special 03", Integer.valueOf(j));
+			logger.info(String.format("Set tag %1$d %2$s reference %3$d Special %4$02x", i, index1.getTag(), j, indexList.get(j).getSpecialByte()));
+			break;
+		    }
+		}
+	    }
+	}
+	if (firstSPTagIndex == -1) {
+	    firstSPTagIndex = 0;
 	}
 	return true;
     }

@@ -131,7 +131,7 @@ public class Main {
 			System.out.println(String.format(" unknown: %1$d", r2.getUnknownShort()));
 		    } else if (i.getTag().compareTo("FT") == 0) {
 			org.debian.paulliu.darnwdl.wdlo.FT ft = new org.debian.paulliu.darnwdl.wdlo.FT(i);
-			System.out.println(String.format(" index: %1$d", ft.getIndex()));
+			System.out.println(String.format(" index: %1$d", ft.getFilePointerToSP()));
 		    } else if (i.getTag().compareTo("ET") == 0 || i.getTag().compareTo("EU") == 0) {
 			org.debian.paulliu.darnwdl.wdlo.ET et = new org.debian.paulliu.darnwdl.wdlo.ET(i);
 			java.util.ArrayList<org.debian.paulliu.darnwdl.wdlo.ET.ETData> etDataList = et.getETDataList();
