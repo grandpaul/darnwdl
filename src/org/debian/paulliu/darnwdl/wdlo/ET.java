@@ -55,26 +55,39 @@ public class ET extends org.debian.paulliu.darnwdl.wdlo.Index {
 	    string_Width = null;
 	}
 
-	/**
-	 * get String that stored in this ETData structure
-	 *
-	 * @param encoding encoding of the ETData
-	 * @return String encoded by encoding
-	 */
-	public String getString(String encoding) {
+	private java.nio.charset.Charset guessEncoding() {
+	    java.nio.charset.Charset ret = java.nio.charset.Charset.forName("big5");
+	    int ftI = getReference("FT");
+	    if (ftI < 0) {
+		return ret;
+	    }
+	    org.debian.paulliu.darnwdl.wdlo.Index ftIndex;
+	    ftIndex = getWPass2().getIndexList().get(ftI);
+	    org.debian.paulliu.darnwdl.wdlo.FT ft = new org.debian.paulliu.darnwdl.wdlo.FT(ftIndex);
+	    int SP01I = ft.getReference("Special01");
+	    if (SP01I < 0) {
+		return ret;
+	    }
+	    org.debian.paulliu.darnwdl.wdlo.Index SP01Index;
+	    SP01Index = getWPass2().getIndexList().get(SP01I);
+	    org.debian.paulliu.darnwdl.wdlo.Special01 sp01 = new org.debian.paulliu.darnwdl.wdlo.Special01(SP01Index);
+	    java.nio.charset.Charset guessCharset = sp01.getFontFaceCharsetGuess();
+	    if (guessCharset != null) {
+		ret = guessCharset;
+	    }
+	    return ret;
+	}
+
+	public String getString() {
+	    return getString(guessEncoding());
+	}
+
+	public String getString(java.nio.charset.Charset charSet) {
 	    if (this.string_S != null) {
 		return this.string_S;
 	    }
 
 	    java.util.ArrayList<Integer> width = new java.util.ArrayList<Integer> ();
-	    java.nio.charset.Charset charSet = null;
-	    try {
-		charSet = java.nio.charset.Charset.forName(encoding);
-	    } catch (java.nio.charset.IllegalCharsetNameException e) {
-		logger.severe("conver string error: "+e.toString());
-	    } catch (java.lang.IllegalArgumentException e) {
-		logger.severe("conver string error: "+e.toString());
-	    }
 	    if (charSet == null) {
 		return null;
 	    }
@@ -82,8 +95,11 @@ public class ET extends org.debian.paulliu.darnwdl.wdlo.Index {
 	    java.io.StringWriter sw = new java.io.StringWriter();
 	    
 	    for (int i=0; i<this.stringLen; i++) {
-		Integer width1 = flag1_0x2_width.get(i);
-		if ((this.string[i] & 0x80) != 0) {
+		if (i < flag1_0x2_width.size()) {
+		    Integer width1 = flag1_0x2_width.get(i);
+		    width.add(width1);
+		}
+		if ((Byte.toUnsignedInt(this.string[i]) & 0x80) != 0) {
 		    byte[] buf1 = null;
 		    if (i+1 < this.stringLen) {
 			buf1 = new byte[2];
@@ -108,11 +124,37 @@ public class ET extends org.debian.paulliu.darnwdl.wdlo.Index {
 		    }
 		    sw.write(s1);
 		}
-		width.add(width1);
 	    }
 	    this.string_S = sw.toString();
 	    this.string_Width = width;
 	    return this.string_S;
+	}
+
+	
+	/**
+	 * get String that stored in this ETData structure
+	 *
+	 * @param encoding encoding of the ETData
+	 * @return String encoded by encoding
+	 */
+	public String getString(String encoding) {
+	    if (this.string_S != null) {
+		return this.string_S;
+	    }
+
+	    java.nio.charset.Charset charSet = null;
+	    try {
+		charSet = java.nio.charset.Charset.forName(encoding);
+	    } catch (java.nio.charset.IllegalCharsetNameException e) {
+		logger.severe("conver string error: "+e.toString());
+	    } catch (java.lang.IllegalArgumentException e) {
+		logger.severe("conver string error: "+e.toString());
+	    }
+	    if (charSet == null) {
+		return null;
+	    }
+	    
+	    return getString(charSet);
 	}
 
 	public java.util.ArrayList<Integer> getWidth() {

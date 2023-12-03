@@ -278,19 +278,19 @@ public class WPass2 {
 		}
 		if (sr1.getTag().compareTo("FT") == 0 || sr1.getTag().compareTo("UF") == 0) {
 		    if (indexList.get(j).getSpecialByte() == 1) {
-			index1.setReference("Special 01", Integer.valueOf(j));
+			index1.setReference("Special01", Integer.valueOf(j));
 			logger.info(String.format("Set tag %1$d %2$s reference %3$d Special %4$02x", i, index1.getTag(), j, indexList.get(j).getSpecialByte()));
 			break;
 		    }
 		} else if (sr1.getTag().compareTo("BH") == 0) {
 		    if (indexList.get(j).getSpecialByte() == 2) {
-			index1.setReference("Special 02", Integer.valueOf(j));
+			index1.setReference("Special02", Integer.valueOf(j));
 			logger.info(String.format("Set tag %1$d %2$s reference %3$d Special %4$02x", i, index1.getTag(), j, indexList.get(j).getSpecialByte()));
 			break;
 		    }
-		}  else if (sr1.getTag().compareTo("PN") == 0) {
+		} else if (sr1.getTag().compareTo("PN") == 0) {
 		    if (indexList.get(j).getSpecialByte() == 3) {
-			index1.setReference("Special 03", Integer.valueOf(j));
+			index1.setReference("Special03", Integer.valueOf(j));
 			logger.info(String.format("Set tag %1$d %2$s reference %3$d Special %4$02x", i, index1.getTag(), j, indexList.get(j).getSpecialByte()));
 			break;
 		    }

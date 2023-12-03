@@ -60,6 +60,11 @@ public class UT extends org.debian.paulliu.darnwdl.wdlo.Index {
 	    }
 	    return string;
 	}
+
+	public java.util.ArrayList<Integer> getWidth() {
+            return this.flag1_0x2_width;
+        }
+
     }
 
     private java.util.logging.Logger logger;

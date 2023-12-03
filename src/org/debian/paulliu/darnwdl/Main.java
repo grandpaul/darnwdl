@@ -137,10 +137,11 @@ public class Main {
 			java.util.ArrayList<org.debian.paulliu.darnwdl.wdlo.ET.ETData> etDataList = et.getETDataList();
 			java.io.StringWriter sw = new java.io.StringWriter();
 			for (org.debian.paulliu.darnwdl.wdlo.ET.ETData etData : etDataList) {
+			    String out1 = etData.getString();
 			    sw.write("{");
 			    sw.write(String.format("x: %1$d, ", etData.x));
 			    sw.write(String.format("y: %1$d, ", etData.y));
-			    sw.write(String.format("string: %1$s, ", etData.getString("big5")));
+			    sw.write(String.format("string: %1$s, ", out1));
 			    sw.write(String.format("flag1: 0x%1$x, ", etData.flag1));
 			    if ((etData.flag1 & 0x02) != 0) {
 				sw.write("flag1_0x2_width: [");
@@ -153,12 +154,40 @@ public class Main {
 			    sw.write("}, ");
 			}
 			System.out.println(" etdata: "+sw.toString());
+		    } else if (i.getTag().compareTo("UT") == 0) {
+			org.debian.paulliu.darnwdl.wdlo.UT ut = new org.debian.paulliu.darnwdl.wdlo.UT(i);
+			java.util.ArrayList<org.debian.paulliu.darnwdl.wdlo.UT.UTData> utDataList = ut.getUTDataList();
+			java.io.StringWriter sw = new java.io.StringWriter();
+			for (org.debian.paulliu.darnwdl.wdlo.UT.UTData utData : utDataList) {
+			    String out1 = utData.getString();
+			    sw.write("{");
+			    sw.write(String.format("x: %1$d, ", utData.x));
+			    sw.write(String.format("y: %1$d, ", utData.y));
+			    sw.write(String.format("string: %1$s, ", out1));
+			    sw.write(String.format("flag1: 0x%1$x, ", utData.flag1));
+			    if ((utData.flag1 & 0x02) != 0) {
+				sw.write("flag1_0x2_width: [");
+				for (Integer width1 : utData.getWidth()) {
+				    sw.write(width1.toString());
+				    sw.write(", ");
+				}
+				sw.write("], ");
+			    }
+			    sw.write("}, ");
+			}
+			System.out.println(" utdata: "+sw.toString());
 		    } else if (i.getTag().compareTo("CR") == 0) {
 			org.debian.paulliu.darnwdl.wdlo.CR cr = new org.debian.paulliu.darnwdl.wdlo.CR(i);
 			System.out.println(String.format(" rectangle: %1$s", cr.getRectangle().toString()));
 		    }
 		} else {
 		    System.out.println(String.format("special %1$d: %2$d", i.getSpecialByte(), i.getFilePointer()));
+		    if (i.getSpecialByte() == 1) {
+			org.debian.paulliu.darnwdl.wdlo.Special01 sp01 = new org.debian.paulliu.darnwdl.wdlo.Special01 (i);
+			String fontFaceString = sp01.getFontFaceString();
+			int fontSize = sp01.getFontSize();
+			System.out.println(String.format(" fontFace=%1$s, fontSize=%2$d, guessCharset=%3$s", fontFaceString, fontSize, sp01.getFontFaceCharsetGuess().name()));
+		    }
 		}
 	    }
 	    return;
