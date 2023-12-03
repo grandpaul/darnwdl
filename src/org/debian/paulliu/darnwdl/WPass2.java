@@ -153,6 +153,12 @@ public class WPass2 {
 		    if (lastCR != -1) {
 			wdloIndex.setReference("CR", lastCR);
 		    }
+		    if (lastPN != -1) {
+			wdloIndex.setReference("PN", lastPN);
+		    }
+		    if (lastBH != -1) {
+			wdloIndex.setReference("BH", lastBH);
+		    }
 		} else if (tag.compareTo("CP") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
@@ -170,6 +176,12 @@ public class WPass2 {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
 		    if (lastCR != -1) {
 			wdloIndex.setReference("CR", lastCR);
+		    }
+		    if (lastPN != -1) {
+			wdloIndex.setReference("PN", lastPN);
+		    }
+		    if (lastBH != -1) {
+			wdloIndex.setReference("BH", lastBH);
 		    }
 		} else if (tag.compareTo("AQ") == 0) {
 		    long seeklen = readInt16();
