@@ -134,9 +134,9 @@ public class Main {
 			System.out.println(String.format(" index: %1$d", ft.getFilePointerToSP()));
 		    } else if (i.getTag().compareTo("ET") == 0 || i.getTag().compareTo("EU") == 0) {
 			org.debian.paulliu.darnwdl.wdlo.ET et = new org.debian.paulliu.darnwdl.wdlo.ET(i);
-			java.util.ArrayList<org.debian.paulliu.darnwdl.wdlo.ET.ETData> etDataList = et.getETDataList();
+			java.util.ArrayList<org.debian.paulliu.darnwdl.wdlo.etdata.ETData> etDataList = et.getETDataList();
 			java.io.StringWriter sw = new java.io.StringWriter();
-			for (org.debian.paulliu.darnwdl.wdlo.ET.ETData etData : etDataList) {
+			for (org.debian.paulliu.darnwdl.wdlo.etdata.ETData etData : etDataList) {
 			    String out1 = etData.getString();
 			    sw.write("{");
 			    sw.write(String.format("x: %1$d, ", etData.x));
@@ -156,9 +156,9 @@ public class Main {
 			System.out.println(" etdata: "+sw.toString());
 		    } else if (i.getTag().compareTo("UT") == 0) {
 			org.debian.paulliu.darnwdl.wdlo.UT ut = new org.debian.paulliu.darnwdl.wdlo.UT(i);
-			java.util.ArrayList<org.debian.paulliu.darnwdl.wdlo.UT.UTData> utDataList = ut.getUTDataList();
+			java.util.ArrayList<org.debian.paulliu.darnwdl.wdlo.utdata.UTData> utDataList = ut.getUTDataList();
 			java.io.StringWriter sw = new java.io.StringWriter();
-			for (org.debian.paulliu.darnwdl.wdlo.UT.UTData utData : utDataList) {
+			for (org.debian.paulliu.darnwdl.wdlo.utdata.UTData utData : utDataList) {
 			    String out1 = utData.getString();
 			    sw.write("{");
 			    sw.write(String.format("x: %1$d, ", utData.x));

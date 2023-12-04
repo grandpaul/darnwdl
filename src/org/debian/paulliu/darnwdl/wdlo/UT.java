@@ -25,57 +25,15 @@ package org.debian.paulliu.darnwdl.wdlo;
 public class UT extends org.debian.paulliu.darnwdl.wdlo.Index {
 
     private java.nio.charset.Charset charSet;
-
-    public class UTData {
-	public int x;
-	public int y;
-	public int flag1;
-	public String string;
-	public int flag1_0x1_x1;
-	public int flag1_0x1_y1;
-	public int flag1_0x1_x2;
-	public int flag1_0x1_y2;
-	public java.util.ArrayList<Integer> flag1_0x2_width;
-
-	public UTData() {
-	    x = 0;
-	    y = 0;
-	    flag1 = 0;
-	    string = null;
-	    flag1_0x1_x1 = 0;
-	    flag1_0x1_y1 = 0;
-	    flag1_0x1_x2 = 0;
-	    flag1_0x1_y2 = 0;
-	    flag1_0x2_width = new java.util.ArrayList<Integer>();
-	}
-
-	/**
-	 * get String that stored in this UTData structure
-	 *
-	 * @return String encoded by encoding
-	 */
-	public String getString() {
-	    if (string == null) {
-		return new String();
-	    }
-	    return string;
-	}
-
-	public java.util.ArrayList<Integer> getWidth() {
-            return this.flag1_0x2_width;
-        }
-
-    }
-
     private java.util.logging.Logger logger;
-    private java.util.ArrayList<UTData> utDataList;
+    private java.util.ArrayList<org.debian.paulliu.darnwdl.wdlo.utdata.UTData> utDataList;
 
-    public java.util.ArrayList<UTData> getUTDataList() {
+    public java.util.ArrayList<org.debian.paulliu.darnwdl.wdlo.utdata.UTData> getUTDataList() {
 	return this.utDataList;
     }
     
     private void loadDataFromFile() {
-	utDataList = new java.util.ArrayList<UTData>();
+	utDataList = new java.util.ArrayList<org.debian.paulliu.darnwdl.wdlo.utdata.UTData>();
 	try {
 	    java.io.RandomAccessFile inputFile = getInputFile();
 	    byte[] tagBuf = new byte[2];
@@ -84,7 +42,7 @@ public class UT extends org.debian.paulliu.darnwdl.wdlo.Index {
 	    inputFile.read(tagBuf);
 	    seekLen = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);
 	    while (seekLen > 0) {
-		UTData utData = new UTData();
+		org.debian.paulliu.darnwdl.wdlo.utdata.UTData utData = new org.debian.paulliu.darnwdl.wdlo.utdata.UTData(this);
 		int stringLen = 0;
 		byte[] utf16data;
 		utData.x = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);
