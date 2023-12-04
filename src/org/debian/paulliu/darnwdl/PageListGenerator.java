@@ -36,16 +36,23 @@ public class PageListGenerator {
     public java.util.ArrayList <org.debian.paulliu.darnwdl.Page> getPageList() {
 	ArrayList<org.debian.paulliu.darnwdl.Page> ret = new ArrayList<org.debian.paulliu.darnwdl.Page>();
 	java.util.ArrayList <org.debian.paulliu.darnwdl.wdlo.Index> indexList = wPass2.getIndexList();
+	int lastCR = -1;
 	for (int i=0; i<wPass2.getIndexList().size(); ) {
 	    org.debian.paulliu.darnwdl.wdlo.Index index1;
 	    org.debian.paulliu.darnwdl.Page page1;
 	    int j;
 	    index1 = indexList.get(i);
+	    if (index1.getTag() != null && index1.getTag().compareTo("CR") == 0) {
+		lastCR = i;
+	    }
 	    if (index1.getTag() == null || index1.getTag().compareTo("R2") != 0) {
 		i++;
 		continue;
 	    }
 	    for (j=i+1; j<indexList.size(); j++) {
+		if (indexList.get(j).getTag() != null && indexList.get(j).getTag().compareTo("CR") == 0) {
+		    lastCR = j;
+		}
 		if (indexList.get(j).getTag() == null || indexList.get(j).getTag().compareTo("R2") == 0) {
 		    break;
 		}
@@ -53,6 +60,9 @@ public class PageListGenerator {
 	    page1 = new org.debian.paulliu.darnwdl.Page(this);
 	    page1.setStartIndex(i+1);
 	    page1.setEndIndex(j-1);
+	    if (lastCR != -1) {
+		indexList.get(j-1).setReference("CR", lastCR);
+	    }
 	    ret.add(page1);
 	    i=j;
 	}

@@ -34,6 +34,8 @@ public class MainWindow extends JFrame {
     private org.debian.paulliu.darnwdl.ui.DrawPanel drawPanel = null;
     private JScrollPane drawPanelScrollPane = null;
     private JLabel statusBar = null;
+    private java.util.ArrayList <org.debian.paulliu.darnwdl.Page> pages = null;
+    private int currentPage = 0;
 
     public MainWindow() {
 	super("darnwdl");
@@ -47,6 +49,22 @@ public class MainWindow extends JFrame {
     private class MenuFileOpenActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("File -> Open");
+	    JFileChooser chooser = new JFileChooser();
+	    javax.swing.filechooser.FileNameExtensionFilter filter = new javax.swing.filechooser.FileNameExtensionFilter("WDL & WDLO Files", "wdl", "wdlo");
+	    chooser.setFileFilter(filter);
+	    int returnVal = chooser.showOpenDialog(getThisMainWindow());
+	    if(returnVal == JFileChooser.APPROVE_OPTION) {
+		logger.info ("Open " + chooser.getSelectedFile().getName());
+		if (chooser.getSelectedFile().getName().endsWith(".wdlo")) {
+		    org.debian.paulliu.darnwdl.WPass2 wPass2 = new org.debian.paulliu.darnwdl.WPass2(chooser.getSelectedFile());
+		    org.debian.paulliu.darnwdl.PageListGenerator pageListGenerator = new org.debian.paulliu.darnwdl.PageListGenerator (wPass2);
+		    pages = pageListGenerator.getPageList();
+		    currentPage = 0;
+		    if (currentPage < pages.size()) {
+			drawPanel.drawPage(pages.get(currentPage));
+		    }
+		}
+	    }
 	}
     }
 
@@ -61,6 +79,48 @@ public class MainWindow extends JFrame {
     private class MenuHelpAboutActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    logger.info("Help -> About");
+	}
+    }
+
+    private class ToolboxButtonFirstActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    currentPage = 0;
+	    if (currentPage < pages.size()) {
+		drawPanel.drawPage(pages.get(currentPage));
+	    }
+	}
+    }
+
+    private class ToolboxButtonForwardActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    if (currentPage + 1 < pages.size()) {
+		currentPage = currentPage + 1;
+		drawPanel.drawPage(pages.get(currentPage));
+	    }
+	}
+    }
+
+    private class ToolboxButtonBackActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    if (currentPage > 0) {
+		currentPage = currentPage - 1;
+	    }
+	    if (currentPage < pages.size()) {
+		drawPanel.drawPage(pages.get(currentPage));
+	    }
+	}
+    }
+    
+    private class ToolboxButtonLastActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    if (pages.size() > 0) {
+		currentPage = pages.size() - 1;
+	    } else {
+		currentPage = 0;
+	    }
+	    if (currentPage < pages.size()) {
+		drawPanel.drawPage(pages.get(currentPage));
+	    }
 	}
     }
 
@@ -273,6 +333,10 @@ public class MainWindow extends JFrame {
 	toolBox.add(toolBoxButton_Forward);
 	toolBox.add(toolBoxButton_Last);
 
+	toolBoxButton_First.addActionListener(new ToolboxButtonFirstActionListener());
+	toolBoxButton_Back.addActionListener(new ToolboxButtonBackActionListener());
+	toolBoxButton_Forward.addActionListener(new ToolboxButtonForwardActionListener());
+	toolBoxButton_Last.addActionListener(new ToolboxButtonLastActionListener());
 	toolBoxButton_Quit.addActionListener(new ToolboxButtonQuitActionListener());
 	
 	cp.add(toolBox, BorderLayout.NORTH);
@@ -291,6 +355,14 @@ public class MainWindow extends JFrame {
 	panel.revalidate();
     }
 
+    public int getCurrentPage() {
+	return currentPage;
+    }
+
     public void stop() {
+    }
+
+    public JFrame getThisMainWindow() {
+	return this;
     }
 }

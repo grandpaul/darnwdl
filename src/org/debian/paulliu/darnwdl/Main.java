@@ -203,6 +203,11 @@ public class Main {
 	    }
 	    return;
 	}
+	if (args.length >= 1 && args[0].equals("font")) {
+	    java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.INFO);
+	    org.debian.paulliu.darnwdl.ui.FontReplaceTable ft = new org.debian.paulliu.darnwdl.ui.FontReplaceTable();
+	    return;
+	}
 	java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.SEVERE);
 	for (int i=0; args!=null && i<args.length; i++) {
 	    if (args[i].equals("debug")) {

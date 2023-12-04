@@ -30,7 +30,8 @@ import javax.swing.event.*;
 import java.util.*;
 
 public class DrawPanel extends JPanel {
-
+    private java.awt.Image image1;
+    
     public DrawPanel() {
 	super();
 	this.setPreferredSize(new Dimension(1024,768));
@@ -39,6 +40,17 @@ public class DrawPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+	if (image1 != null) {
+	    this.setPreferredSize(new Dimension(image1.getWidth(null),image1.getHeight(null)));
+	    g.drawImage(image1, 0, 0, java.awt.Color.WHITE, null);
+	}
+    }
+
+    public void drawPage(org.debian.paulliu.darnwdl.Page page1) {
+	java.awt.Image img;
+	img = page1.render();
+	image1 = img;
+	this.repaint();
     }
     
 }

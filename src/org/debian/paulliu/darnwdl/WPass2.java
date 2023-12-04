@@ -114,6 +114,9 @@ public class WPass2 {
 		    needSpecialStructure.add(Integer.valueOf(indexList.size()-1));
 		} else if (tag.compareTo("R2") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 2);
+		    if (lastCR != -1) {
+			wdloIndex.setReference("CR", lastCR);
+		    }
 		} else if (tag.compareTo("CT") == 0) {
 		    inputFileStream.seek(inputFileStream.getFilePointer() + 2);
 		} else if (tag.compareTo("UF") == 0) {
@@ -126,9 +129,6 @@ public class WPass2 {
 		} else if (tag.compareTo("ET") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
-		    if (lastCR != -1) {
-			wdloIndex.setReference("CR", lastCR);
-		    }
 		    if (lastFT != -1) {
 			wdloIndex.setReference("FT", lastFT);
 		    }
@@ -138,9 +138,6 @@ public class WPass2 {
 		} else if (tag.compareTo("EU") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
-		    if (lastCR != -1) {
-			wdloIndex.setReference("CR", lastCR);
-		    }
 		    if (lastFT != -1) {
 			wdloIndex.setReference("FT", lastFT);
 		    }
@@ -150,9 +147,6 @@ public class WPass2 {
 		} else if (tag.compareTo("FR") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
-		    if (lastCR != -1) {
-			wdloIndex.setReference("CR", lastCR);
-		    }
 		    if (lastPN != -1) {
 			wdloIndex.setReference("PN", lastPN);
 		    }
@@ -165,18 +159,12 @@ public class WPass2 {
 		} else if (tag.compareTo("PL") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
-		    if (lastCR != -1) {
-			wdloIndex.setReference("CR", lastCR);
-		    }
 		    if (lastPN != -1) {
 			wdloIndex.setReference("PN", lastPN);
 		    }
 		} else if (tag.compareTo("AP") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
-		    if (lastCR != -1) {
-			wdloIndex.setReference("CR", lastCR);
-		    }
 		    if (lastPN != -1) {
 			wdloIndex.setReference("PN", lastPN);
 		    }
@@ -199,9 +187,6 @@ public class WPass2 {
 		    long seeklen = readInt16();
 		    seeklen = readInt32();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
-		    if (lastCR != -1) {
-			wdloIndex.setReference("CR", lastCR);
-		    }
 		} else if (tag.compareTo("SD") == 0) {
 		    long seeklen = readInt16();
 		    if (seeklen != 0) {
@@ -221,9 +206,6 @@ public class WPass2 {
 			graphDataLen2 = readInt32();
 			inputFileStream.seek(inputFileStream.getFilePointer() + graphDataLen2);
 		    }
-		    if (lastCR != -1) {
-			wdloIndex.setReference("CR", lastCR);
-		    }
 		} else if (tag.compareTo("SX") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
@@ -233,9 +215,6 @@ public class WPass2 {
 		} else if (tag.compareTo("UT") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
-		    if (lastCR != -1) {
-			wdloIndex.setReference("CR", lastCR);
-		    }
 		    if (lastFT != -1) {
 			wdloIndex.setReference("FT", lastFT);
 		    }

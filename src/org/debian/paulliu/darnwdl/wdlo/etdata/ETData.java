@@ -156,6 +156,9 @@ public class ETData {
     }
 
     public java.util.ArrayList<Integer> getWidth() {
+	if (this.string_Width == null) {
+	    this.getString();
+	}
 	return this.string_Width;
     }
 }
