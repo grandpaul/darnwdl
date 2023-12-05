@@ -36,7 +36,6 @@ public class MainWindow extends JFrame {
     private JLabel statusBar = null;
     private java.util.ArrayList <org.debian.paulliu.darnwdl.Page> pages = null;
     private int currentPage = 0;
-    private java.awt.Dimension viewportDimension = null;
     private double scaleFactor = 1.0;
     private int fitType = 0;
 
@@ -59,7 +58,7 @@ public class MainWindow extends JFrame {
 	openFile(wdlFile);
     }
 
-    private java.awt.image.BufferedImage resizeImage(java.awt.Image originalImage, int targetWidth, int targetHeight) {
+    private java.awt.image.BufferedImage resizeImage01(java.awt.Image originalImage, int targetWidth, int targetHeight) {
 	java.awt.image.BufferedImage resizedImage = new java.awt.image.BufferedImage(targetWidth, targetHeight, java.awt.image.BufferedImage.TYPE_INT_RGB);
 	java.awt.Graphics2D graphics2D = resizedImage.createGraphics();
 	graphics2D.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
@@ -67,8 +66,17 @@ public class MainWindow extends JFrame {
 	return resizedImage;
     }
 
+    private java.awt.Image resizeImage(java.awt.Image originalImage, int targetWidth, int targetHeight) {
+	java.awt.Image resizedImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+	return resizedImage;
+    }
+
     private void drawPage() {
-	org.debian.paulliu.darnwdl.Page page = pages.get(currentPage);
+	org.debian.paulliu.darnwdl.Page page;
+	if (pages == null) {
+	    return;
+	}
+	page = pages.get(currentPage);
 	java.awt.Image img = page.render();
 	javax.swing.ImageIcon image1icon = new javax.swing.ImageIcon(img);
 	double imgWidth = (double)image1icon.getIconWidth();
@@ -79,22 +87,49 @@ public class MainWindow extends JFrame {
 	} else if (fitType == 0) {
 	    img = resizeImage(img, (int)(imgWidth * scaleFactor), (int)(imgHeight * scaleFactor));
 	} else if (fitType == 1) {
-	    scaleFactor = viewportDimension.getWidth() / imgWidth;
+	    java.awt.Rectangle viewportRectangle = drawPanelScrollPane.getViewport().getViewRect();
+	    scaleFactor = viewportRectangle.getWidth() / imgWidth;
+	    if (scaleFactor < 0) {
+		scaleFactor = 0;
+	    }
 	    img = resizeImage(img, (int)(imgWidth * scaleFactor), (int)(imgHeight * scaleFactor));
 	} else if (fitType == 2) {
-	    scaleFactor = viewportDimension.getHeight() / imgHeight;
+	    java.awt.Rectangle viewportRectangle = drawPanelScrollPane.getViewport().getViewRect();
+	    scaleFactor = viewportRectangle.getHeight() / imgHeight;
+	    if (scaleFactor < 0) {
+		scaleFactor = 0;
+	    }
 	    img = resizeImage(img, (int)(imgWidth * scaleFactor), (int)(imgHeight * scaleFactor));
 	} else if (fitType == 3) {
-	    scaleFactor = Math.min(viewportDimension.getWidth() / imgWidth, viewportDimension.getHeight() / imgHeight);
+	    java.awt.Rectangle viewportRectangle = drawPanelScrollPane.getViewport().getViewRect();
+	    scaleFactor = Math.min(viewportRectangle.getWidth() / imgWidth, viewportRectangle.getHeight() / imgHeight);
+	    if (scaleFactor < 0) {
+		scaleFactor = 0;
+	    }
 	    img = resizeImage(img, (int)(imgWidth * scaleFactor), (int)(imgHeight * scaleFactor));
 	}
 	drawPanel.drawImage(img);
 
     }
+
+    private void startFit() {
+	java.awt.event.ComponentListener[] componentListeners = drawPanelScrollPane.getComponentListeners();
+	if (componentListeners.length <= 0) {
+	    drawPanelScrollPane.addComponentListener(new JScrollPaneViewportComponentListener());
+	}
+    }
+
+    private void stopFit() {
+	java.awt.event.ComponentListener[] componentListeners = drawPanelScrollPane.getComponentListeners();
+	for (int i=componentListeners.length-1; i>=0; i--) {
+	    drawPanelScrollPane.removeComponentListener(componentListeners[i]);
+	}
+    }
     
     private void openFile(java.io.File wdlFile) {
 	this.scaleFactor = 1.0;
 	this.fitType = 0;
+	stopFit();
 	java.io.File wdloFile = null;
 	if (wdlFile.getName().toUpperCase().endsWith(".WDL")) {
 	    try {
@@ -161,7 +196,11 @@ public class MainWindow extends JFrame {
 	public void actionPerformed(ActionEvent e) {
 	    pages = null;
 	    currentPage = 0;
+	    fitType=0;
+	    scaleFactor=1.0;
+	    stopFit();
 	    drawPanel.clearImage();
+	    statusBar.setText(" ");
 	}
     }
 
@@ -169,6 +208,7 @@ public class MainWindow extends JFrame {
 	public void actionPerformed(ActionEvent e) {
 	    fitType=3;
 	    drawPage();
+	    startFit();
 	}
     }
 
@@ -176,6 +216,7 @@ public class MainWindow extends JFrame {
 	public void actionPerformed(ActionEvent e) {
 	    fitType=1;
 	    drawPage();
+	    startFit();
 	}
     }
     
@@ -183,12 +224,14 @@ public class MainWindow extends JFrame {
 	public void actionPerformed(ActionEvent e) {
 	    fitType=2;
 	    drawPage();
+	    startFit();
 	}
     }
 
     private class ToolboxButtonZoomInActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    fitType=0;
+	    stopFit();
 	    scaleFactor += 0.1;
 	    drawPage();
 	}
@@ -197,6 +240,7 @@ public class MainWindow extends JFrame {
     private class ToolboxButtonZoomOutActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    fitType=0;
+	    stopFit();
 	    if (scaleFactor >= 0.2) {
 		scaleFactor -= 0.1;
 	    }
@@ -364,17 +408,8 @@ public class MainWindow extends JFrame {
     private class MainWindowComponentListener extends java.awt.event.ComponentAdapter {
 	@Override
 	public void componentResized(ComponentEvent e) {
-	    /* We can get the width and height of the viewPort's size.
-	       So that FitH and FitW works */
-	    double viewPortWidth = 0;
-	    double viewPortHeight = 0;
-	    if (drawPanelScrollPane != null && logger != null) {
-		Rectangle r1 = drawPanelScrollPane.getViewport().getViewRect();
+	    if (logger != null) {
 		logger.info("Resized to " + e.getComponent().getSize());
-		logger.info("Rectangle: " + r1.toString());
-		viewPortWidth = r1.getWidth();
-		viewPortHeight = r1.getHeight();
-		viewportDimension = new java.awt.Dimension((int)(viewPortWidth), (int)viewPortHeight);
 	    }
 	}
 	@Override
@@ -385,6 +420,73 @@ public class MainWindow extends JFrame {
 	}
     }
 
+    private class JScrollPaneViewportComponentListener extends java.awt.event.ComponentAdapter {
+	@Override
+	public void componentResized(ComponentEvent e) {
+	    /* We can get the width and height of the viewPort's size.
+	       So that FitH and FitW works */
+	    double viewPortWidth = 0;
+	    double viewPortHeight = 0;
+	    if (drawPanelScrollPane != null && logger != null) {
+		Rectangle r1 = drawPanelScrollPane.getViewport().getViewRect();
+		logger.info("Resized to " + e.getComponent().getSize());
+		logger.info("Rectangle: " + r1.toString());
+		viewPortWidth = r1.getWidth();
+		viewPortHeight = r1.getHeight();
+		drawPage();
+	    }
+	}
+    }
+
+    
+    private class MainWindowKeyAdapter extends java.awt.event.KeyAdapter {
+	@Override
+	public void keyReleased(java.awt.event.KeyEvent e) {
+	    logger.info(String.format("key Typed: %1$s", e.toString()));
+	    if (drawPanelScrollPane == null) {
+		return;
+	    }
+	    javax.swing.JScrollBar jScrollBar = drawPanelScrollPane.getVerticalScrollBar();
+	    if (e.getKeyCode() == java.awt.event.KeyEvent.VK_PAGE_DOWN) {
+		int u = jScrollBar.getVisibleAmount();
+		if (jScrollBar.getValue() + u >= jScrollBar.getMaximum()) {
+		    if (pages == null) {
+			return;
+		    }
+		    if (currentPage + 1 < pages.size()) {
+			currentPage = currentPage + 1;
+			drawPage();
+			statusBar.setText(String.format("%1$d/%2$d", currentPage+1, pages.size()));
+			jScrollBar.setValue(jScrollBar.getMinimum());
+		    }
+		} else {
+		    jScrollBar.setValue(jScrollBar.getValue()+u);
+		    logger.info(String.format("jScrollBar current value %1$d, min %2$d, max %3$d, visiable value %4$d", jScrollBar.getValue(), jScrollBar.getMinimum(), jScrollBar.getMaximum(), u));
+		}
+	    } else if (e.getKeyCode() == java.awt.event.KeyEvent.VK_PAGE_UP) {
+		int u = jScrollBar.getVisibleAmount();
+		if (jScrollBar.getValue() <= jScrollBar.getMinimum()) {
+		    if (pages == null) {
+			return;
+		    }
+		    if (currentPage > 0) {
+			currentPage = currentPage - 1;
+		    } else {
+			return;
+		    }
+		    if (currentPage < pages.size()) {
+			drawPage();
+			statusBar.setText(String.format("%1$d/%2$d", currentPage+1, pages.size()));
+			jScrollBar.setValue(jScrollBar.getMaximum());
+		    }
+		} else {
+		    jScrollBar.setValue(jScrollBar.getValue()-u);
+		    logger.info(String.format("jScrollBar current value %1$d, min %2$d, max %3$d, visiable value %4$d", jScrollBar.getValue(), jScrollBar.getMinimum(), jScrollBar.getMaximum(), u));
+		}
+	    }
+	}
+    }
+    
     /**
      * Create the Button for Tool Box
      *
@@ -431,6 +533,7 @@ public class MainWindow extends JFrame {
 	
         this.addWindowListener(new MainWindowListener());
 	//this.addComponentListener(new MainWindowComponentListener());
+	this.addKeyListener(new MainWindowKeyAdapter());
 
 	this.setJMenuBar(createMenuBar());
 
@@ -490,8 +593,7 @@ public class MainWindow extends JFrame {
 	drawPanel = new org.debian.paulliu.darnwdl.ui.DrawPanel();
 	drawPanelScrollPane = new JScrollPane(drawPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-	drawPanelScrollPane.addComponentListener(new MainWindowComponentListener());
-	//drawPanel.addComponentListener(new MainWindowComponentListener());
+	//drawPanelScrollPane.addComponentListener(new JScrollPaneViewportComponentListener());
 
 	cp.add(drawPanelScrollPane, BorderLayout.CENTER);
 
