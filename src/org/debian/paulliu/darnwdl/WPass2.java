@@ -208,8 +208,8 @@ public class WPass2 {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
 		} else if (tag.compareTo("SP") == 0) {
-		    long seeklen = readInt16();
-		    seeklen = readInt32();
+		    int unknownShort0 = readInt16();
+		    long seeklen = readInt32();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
 		} else if (tag.compareTo("SD") == 0) {
 		    long seeklen = readInt16();

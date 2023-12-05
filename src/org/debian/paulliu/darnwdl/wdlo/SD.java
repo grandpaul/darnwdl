@@ -45,6 +45,32 @@ public class SD extends org.debian.paulliu.darnwdl.wdlo.Index {
     private long unknownInt4;
     private long graphDataLen2;
     private byte[] graphData;
+
+    public java.awt.Rectangle getDestPosition() {
+	java.awt.Rectangle ret = new java.awt.Rectangle(destX, destY, destWidth, destHeight);
+	
+	return ret;
+    }
+
+    public java.awt.image.BufferedImage getSrcImage() {
+	java.awt.image.BufferedImage ret = new java.awt.image.BufferedImage(srcWidth, srcHeight, java.awt.image.BufferedImage.TYPE_INT_RGB);
+	java.awt.Graphics2D graphics2D = ret.createGraphics();
+	graphics2D.setBackground(java.awt.Color.WHITE);
+        graphics2D.clearRect(0, 0, srcWidth, srcHeight);
+	for (int x=0; x<srcWidth; x++) {
+	    for (int y=0; y<srcHeight; y++) {
+		int r = Byte.toUnsignedInt(graphData[(y*srcWidth+x)*3]);
+		int g = Byte.toUnsignedInt(graphData[(y*srcWidth+x)*3+1]);
+		int b = Byte.toUnsignedInt(graphData[(y*srcWidth+x)*3+2]);
+		java.awt.Color color1 = new java.awt.Color(r,g,b);
+		graphics2D.setColor(color1);
+		graphics2D.drawLine(x,y,x,y);
+	    }
+	}
+	graphics2D.dispose();
+	
+	return ret;
+    }
     
     private void loadDataFromFile() {
 	try {

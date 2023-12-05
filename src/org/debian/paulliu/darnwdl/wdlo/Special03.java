@@ -75,6 +75,14 @@ public class Special03 extends org.debian.paulliu.darnwdl.wdlo.Index {
 	return color;
     }
 
+    public int getWidth() {
+	return this.width;
+    }
+    
+    public int getStyle() {
+	return this.style;
+    }
+
     public Special03(org.debian.paulliu.darnwdl.wdlo.Index index1) {
 	super(index1);
 	this.logger = java.util.logging.Logger.getLogger(org.debian.paulliu.darnwdl.Main.loggerName);

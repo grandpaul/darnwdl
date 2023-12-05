@@ -47,7 +47,7 @@ public class Page {
 
     public java.awt.Image render() {
 	java.util.ArrayList<org.debian.paulliu.darnwdl.wdlo.Index> indexList = pageListGenerator.getWPass2().getIndexList();
-	java.awt.image.BufferedImage ret = new java.awt.image.BufferedImage(5000, 5000, java.awt.image.BufferedImage.TYPE_INT_RGB);
+	java.awt.image.BufferedImage ret = new java.awt.image.BufferedImage(maxDimension, maxDimension, java.awt.image.BufferedImage.TYPE_INT_RGB);
 	java.awt.Graphics2D graphics2D = ret.createGraphics();
 	graphics2D.setBackground(java.awt.Color.WHITE);
 	graphics2D.clearRect(0,0,maxDimension,maxDimension);
@@ -186,6 +186,124 @@ public class Page {
 			}
 			logger.info(String.format("Draw string %1$s at (%2$f, %3$f), fontAscent: %4$f", str, (float)((currentX + utData.x) * renderFactor), (float)(utData.y * renderFactor), (float)font1Metrics.getAscent()));
 			graphics2D.drawString(char2.getIterator(), (float)(utData.x * renderFactor), (float)(utData.y * renderFactor + font1Metrics.getAscent()));
+		    }
+		}
+	    } else if (index1.getTag().compareTo("PL") == 0) {
+		org.debian.paulliu.darnwdl.wdlo.PL pl = new org.debian.paulliu.darnwdl.wdlo.PL(index1);
+		int indexTC = pl.getReference("TC");
+		int indexBC = pl.getReference("BC");
+		int indexPN = pl.getReference("PN");
+		if (indexTC >= 0) {
+		    org.debian.paulliu.darnwdl.wdlo.TC tc = new org.debian.paulliu.darnwdl.wdlo.TC(indexList.get(indexTC));
+		    graphics2D.setColor(tc.getColor());
+		}
+		if (indexBC >= 0) {
+		    org.debian.paulliu.darnwdl.wdlo.BC bc = new org.debian.paulliu.darnwdl.wdlo.BC(indexList.get(indexBC));
+		    graphics2D.setBackground(bc.getColor());
+		}
+		if (indexPN >= 0) {
+		    org.debian.paulliu.darnwdl.wdlo.PN pn = new org.debian.paulliu.darnwdl.wdlo.PN(indexList.get(indexPN));
+		    int indexSP03 = pn.getReference("Special03");
+		    if (indexSP03 >= 0) {
+			org.debian.paulliu.darnwdl.wdlo.Special03 sp03 = new org.debian.paulliu.darnwdl.wdlo.Special03(indexList.get(indexSP03));
+			graphics2D.setColor(sp03.getColor());
+			double lineWidth = ((double)sp03.getWidth()) * renderFactor;
+			if (sp03.getStyle() == 2) {
+			    java.awt.Stroke dashed = new java.awt.BasicStroke((int)lineWidth, java.awt.BasicStroke.CAP_BUTT, java.awt.BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+			    graphics2D.setStroke(dashed);
+			} else {
+			    java.awt.BasicStroke stroke1 = new java.awt.BasicStroke((int)lineWidth);
+			    graphics2D.setStroke(stroke1);
+			}
+		    }
+		}
+		java.util.ArrayList < java.awt.geom.Path2D.Float > lines = pl.getLines();
+		for (java.awt.geom.Path2D.Float line : lines) {
+		    float[] coords = new float[6];
+		    java.awt.geom.Path2D.Float lineToDraw = new java.awt.geom.Path2D.Float();
+		    java.awt.geom.PathIterator pathIterator = line.getPathIterator(new java.awt.geom.AffineTransform());
+		    while (!pathIterator.isDone()) {
+			switch (pathIterator.currentSegment(coords)) {
+			case java.awt.geom.PathIterator.SEG_MOVETO:
+			    lineToDraw.moveTo(coords[0]*renderFactor, coords[1]*renderFactor);
+			    break;
+			case java.awt.geom.PathIterator.SEG_LINETO:
+			    lineToDraw.lineTo(coords[0]*renderFactor, coords[1]*renderFactor);
+			    break;
+			default:
+			    logger.severe("We don't handle splines");
+			    break;
+			}
+			pathIterator.next();
+		    }
+		    graphics2D.draw(lineToDraw);
+		}
+	    } else if (index1.getTag().compareTo("SD") == 0) {
+		org.debian.paulliu.darnwdl.wdlo.SD sd = new org.debian.paulliu.darnwdl.wdlo.SD(index1);
+		java.awt.Image img = sd.getSrcImage();
+		java.awt.Rectangle dest = sd.getDestPosition();
+
+		graphics2D.drawImage(img, (int)(dest.getX() * renderFactor), (int)(dest.getY() * renderFactor), (int)(dest.getWidth() * renderFactor), (int)(dest.getHeight() * renderFactor), null);
+		
+	    } else if (index1.getTag().compareTo("SP") == 0) {
+		org.debian.paulliu.darnwdl.wdlo.SP sp = new org.debian.paulliu.darnwdl.wdlo.SP(index1);
+		java.awt.Image img = sp.getSrcImage();
+		java.awt.Rectangle dest = sp.getDestPosition();
+
+		if (img != null) {
+		    graphics2D.drawImage(img, (int)(dest.getX() * renderFactor), (int)(dest.getY() * renderFactor), (int)(dest.getWidth() * renderFactor), (int)(dest.getHeight() * renderFactor), null);
+		}
+	    } else if (index1.getTag().compareTo("FR") == 0) {
+		org.debian.paulliu.darnwdl.wdlo.FR fr = new org.debian.paulliu.darnwdl.wdlo.FR(index1);
+		int fill=0;
+		int indexTC = fr.getReference("TC");
+		int indexBC = fr.getReference("BC");
+		int indexPN = fr.getReference("PN");
+		int indexBH = fr.getReference("BH");
+		if (indexTC >= 0) {
+		    org.debian.paulliu.darnwdl.wdlo.TC tc = new org.debian.paulliu.darnwdl.wdlo.TC(indexList.get(indexTC));
+		    graphics2D.setColor(tc.getColor());
+		}
+		if (indexBC >= 0) {
+		    org.debian.paulliu.darnwdl.wdlo.BC bc = new org.debian.paulliu.darnwdl.wdlo.BC(indexList.get(indexBC));
+		    graphics2D.setBackground(bc.getColor());
+		}
+		if (indexPN >= 0) {
+		    org.debian.paulliu.darnwdl.wdlo.PN pn = new org.debian.paulliu.darnwdl.wdlo.PN(indexList.get(indexPN));
+		    int indexSP03 = pn.getReference("Special03");
+		    if (indexSP03 >= 0) {
+			org.debian.paulliu.darnwdl.wdlo.Special03 sp03 = new org.debian.paulliu.darnwdl.wdlo.Special03(indexList.get(indexSP03));
+			graphics2D.setColor(sp03.getColor());
+			double lineWidth = ((double)sp03.getWidth()) * renderFactor;
+			lineWidth = 1.0; /* TODO: is this correct?? When drawing Rectangle only use lineWidth=1.0 */
+			if (lineWidth < 1.0) {
+			    lineWidth = 1.0;
+			}
+			System.out.println(lineWidth);
+			if (sp03.getStyle() == 2) {
+			    java.awt.Stroke dashed = new java.awt.BasicStroke((int)lineWidth, java.awt.BasicStroke.CAP_BUTT, java.awt.BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+			    graphics2D.setStroke(dashed);
+			} else {
+			    java.awt.BasicStroke stroke1 = new java.awt.BasicStroke((int)lineWidth);
+			    graphics2D.setStroke(stroke1);
+			}
+		    }
+		}
+		if (indexBH >= 0) {
+		    org.debian.paulliu.darnwdl.wdlo.BH bh = new org.debian.paulliu.darnwdl.wdlo.BH(indexList.get(indexBH));
+		    int indexSP02 = bh.getReference("Special02");
+		    if (indexSP02 >= 0) {
+			org.debian.paulliu.darnwdl.wdlo.Special02 sp02 = new org.debian.paulliu.darnwdl.wdlo.Special02(indexList.get(indexSP02));
+			graphics2D.setColor(sp02.getColor());
+			fill = 1;
+		    }
+		}
+		for (java.awt.Rectangle rect1 : fr.getRectangles()) {
+		    java.awt.Rectangle rect2 = new java.awt.Rectangle((int)((double)rect1.getX() * renderFactor), (int)((double)rect1.getY() * renderFactor), (int)((double)rect1.getWidth() * renderFactor), (int)((double)rect1.getHeight() * renderFactor));
+		    if (fill == 1) {
+			graphics2D.fill(rect2);
+		    } else {
+			graphics2D.draw(rect2);
 		    }
 		}
 	    }

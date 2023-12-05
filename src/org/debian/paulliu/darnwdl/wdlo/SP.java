@@ -24,6 +24,7 @@ package org.debian.paulliu.darnwdl.wdlo;
  */
 public class SP extends org.debian.paulliu.darnwdl.wdlo.Index {
     private java.util.logging.Logger logger;
+    private int unknownShort0;
     private int destX;
     private int destY;
     private int destWidth;
@@ -46,6 +47,34 @@ public class SP extends org.debian.paulliu.darnwdl.wdlo.Index {
     private long graphDataLen2;
     private byte[] graphData;
     private byte[] paletteData;
+
+    public java.awt.Rectangle getDestPosition() {
+	java.awt.Rectangle ret = new java.awt.Rectangle(destX, destY, destWidth, destHeight);
+	
+	return ret;
+    }
+
+    public java.awt.image.BufferedImage getSrcImage() {
+	if (graphData != null && compressionMethod == 1) {
+	    java.io.ByteArrayInputStream in1 = new java.io.ByteArrayInputStream(graphData);
+	    java.awt.image.BufferedImage img = null;
+	    try {
+		img = javax.imageio.ImageIO.read(in1);
+	    } catch (java.io.IOException e) {
+		logger.warning("Decode JPEG error");
+	    }
+
+	    /* Flip the image vertically */
+	    java.awt.geom.AffineTransform tx = java.awt.geom.AffineTransform.getScaleInstance(1, -1);
+	    javax.swing.ImageIcon img1 = new javax.swing.ImageIcon(img);
+	    tx.translate(0, -img1.getIconHeight());
+	    java.awt.image.AffineTransformOp op = new java.awt.image.AffineTransformOp(tx, java.awt.image.AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+	    img = op.filter(img, null);
+
+	    return img;
+	}
+	return null;
+    }    
     
     private void loadDataFromFile() {
 	try {
@@ -54,7 +83,8 @@ public class SP extends org.debian.paulliu.darnwdl.wdlo.Index {
 	    long seekLen;
 	    inputFile.seek(getFilePointer());
 	    inputFile.read(tagBuf);
-	    seekLen = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);
+	    unknownShort0 = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);
+	    seekLen = org.debian.paulliu.darnwdl.IO.readInt32(inputFile);
 	    destX = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);
 	    seekLen -= 2;
 	    destY = org.debian.paulliu.darnwdl.IO.readInt16(inputFile);

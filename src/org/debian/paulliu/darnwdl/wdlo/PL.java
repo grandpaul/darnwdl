@@ -26,6 +26,10 @@ public class PL extends org.debian.paulliu.darnwdl.wdlo.Index {
     private java.util.logging.Logger logger;
     private java.util.ArrayList < java.awt.geom.Path2D.Float > lines;
 
+    public java.util.ArrayList < java.awt.geom.Path2D.Float > getLines() {
+	return lines;
+    }
+
     private void loadDataFromFile() {
 	try {
 	    java.io.RandomAccessFile inputFile = getInputFile();

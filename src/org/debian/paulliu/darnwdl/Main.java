@@ -181,6 +181,9 @@ public class Main {
 			    sw.write("}, ");
 			}
 			System.out.println(" utdata: "+sw.toString());
+		    } else if (i.getTag().compareTo("SP") == 0) {
+			org.debian.paulliu.darnwdl.wdlo.SP sp = new org.debian.paulliu.darnwdl.wdlo.SP(i);
+			System.out.println(String.format(" x: %1$f, y:%2$f, width: %3$f, height: %4$f", sp.getDestPosition().getX(), sp.getDestPosition().getY(), sp.getDestPosition().getWidth(), sp.getDestPosition().getHeight()));
 		    } else if (i.getTag().compareTo("CR") == 0) {
 			org.debian.paulliu.darnwdl.wdlo.CR cr = new org.debian.paulliu.darnwdl.wdlo.CR(i);
 			System.out.println(String.format(" rectangle: %1$s", cr.getRectangle().toString()));
@@ -192,6 +195,9 @@ public class Main {
 			String fontFaceString = sp01.getFontFaceString();
 			int fontSize = sp01.getFontSize();
 			System.out.println(String.format(" fontFace=%1$s, fontSize=%2$d, guessCharset=%3$s", fontFaceString, fontSize, sp01.getFontFaceCharsetGuess().name()));
+		    } else if (i.getSpecialByte() == 3) {
+			org.debian.paulliu.darnwdl.wdlo.Special03 sp03 = new org.debian.paulliu.darnwdl.wdlo.Special03 (i);
+			System.out.println(String.format(" width=%1$d, style=%2$d", sp03.getWidth(), sp03.getStyle()));
 		    }
 		}
 	    }
