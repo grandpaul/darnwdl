@@ -494,15 +494,11 @@ public class MainWindow extends JFrame {
      * the button of the tool box
      *
      * @param text The text of the button
-     * @param iconName the icon of the button
+     * @param icon the icon of the button
      * @return the button
      */
-    private javax.swing.JButton createToolBoxButton(String text, String iconName) {
+    private javax.swing.JButton createToolBoxButton(String text, Icon icon) {
 	javax.swing.JButton ret = null;
-	Icon icon = null;
-	if (iconName != null) {
-	    icon = javax.swing.UIManager.getIcon(iconName);
-	}
 	if (icon != null) {
 	    ret = new javax.swing.JButton(text, icon);
 	} else {
@@ -523,6 +519,25 @@ public class MainWindow extends JFrame {
 	dim2.setSize(dim1.getWidth(), 100);
 	ret.setMaximumSize(dim2);
 	return ret;
+    }
+
+    /**
+     * Create the Button for Tool Box
+     *
+     * There is a row of Tool Box in the GUI. This functions creates
+     * the button of the tool box
+     *
+     * @param text The text of the button
+     * @param iconName the icon of the button
+     * @return the button
+     */
+    private javax.swing.JButton createToolBoxButton(String text, String iconName) {
+	javax.swing.JButton ret = null;
+	Icon icon = null;
+	if (iconName != null) {
+	    icon = javax.swing.UIManager.getIcon(iconName);
+	}
+	return createToolBoxButton(text, icon);
     }
     
     public void init() {
@@ -545,19 +560,19 @@ public class MainWindow extends JFrame {
 	
 	toolBox.setLayout(new BoxLayout(toolBox, BoxLayout.X_AXIS));
 
-	javax.swing.JButton toolBoxButton_Open = createToolBoxButton("Open", null);
+	javax.swing.JButton toolBoxButton_Open = createToolBoxButton("Open", "FileView.fileIcon");
 	javax.swing.JButton toolBoxButton_Close = createToolBoxButton("Close", "OptionPane.errorIcon");
-	javax.swing.JButton toolBoxButton_Print = createToolBoxButton("Print", null);
-	javax.swing.JButton toolBoxButton_Quit = createToolBoxButton("Quit", "InternalFrame.closeIcon");
-	javax.swing.JButton toolBoxButton_FitP = createToolBoxButton("FitP", null);
-	javax.swing.JButton toolBoxButton_FitW = createToolBoxButton("FitW", null);
-	javax.swing.JButton toolBoxButton_FitH = createToolBoxButton("FitH", null);
-	javax.swing.JButton toolBoxButton_ZoomIn = createToolBoxButton("Zoom In", null);
-	javax.swing.JButton toolBoxButton_ZoomOut = createToolBoxButton("Zoom Out", null);
-	javax.swing.JButton toolBoxButton_First = createToolBoxButton("First", null);
-	javax.swing.JButton toolBoxButton_Back = createToolBoxButton("Back", null);
-	javax.swing.JButton toolBoxButton_Forward = createToolBoxButton("Forward", null);
-	javax.swing.JButton toolBoxButton_Last = createToolBoxButton("Last", null);
+	javax.swing.JButton toolBoxButton_Print = createToolBoxButton("Print", org.debian.paulliu.darnwdl.ui.StockImage.getInstance().getPrint());
+	javax.swing.JButton toolBoxButton_Quit = createToolBoxButton("Quit", org.debian.paulliu.darnwdl.ui.StockImage.getInstance().getQuit());
+	javax.swing.JButton toolBoxButton_FitP = createToolBoxButton("FitP", org.debian.paulliu.darnwdl.ui.StockImage.getInstance().getFitP());
+	javax.swing.JButton toolBoxButton_FitW = createToolBoxButton("FitW", org.debian.paulliu.darnwdl.ui.StockImage.getInstance().getFitW());
+	javax.swing.JButton toolBoxButton_FitH = createToolBoxButton("FitH", org.debian.paulliu.darnwdl.ui.StockImage.getInstance().getFitH());
+	javax.swing.JButton toolBoxButton_ZoomIn = createToolBoxButton("Zoom In", org.debian.paulliu.darnwdl.ui.StockImage.getInstance().getZoomIn());
+	javax.swing.JButton toolBoxButton_ZoomOut = createToolBoxButton("Zoom Out", org.debian.paulliu.darnwdl.ui.StockImage.getInstance().getZoomOut());
+	javax.swing.JButton toolBoxButton_First = createToolBoxButton("First", org.debian.paulliu.darnwdl.ui.StockImage.getInstance().getGoFirst());
+	javax.swing.JButton toolBoxButton_Back = createToolBoxButton("Back", org.debian.paulliu.darnwdl.ui.StockImage.getInstance().getGoBack());
+	javax.swing.JButton toolBoxButton_Forward = createToolBoxButton("Forward", org.debian.paulliu.darnwdl.ui.StockImage.getInstance().getGoForward());
+	javax.swing.JButton toolBoxButton_Last = createToolBoxButton("Last", org.debian.paulliu.darnwdl.ui.StockImage.getInstance().getGoLast());
 	
 	toolBoxButton_Print.setEnabled(false);
 
