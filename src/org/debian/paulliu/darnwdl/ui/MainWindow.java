@@ -78,6 +78,7 @@ public class MainWindow extends JFrame {
 	    if (currentPage < pages.size()) {
 		drawPanel.drawPage(pages.get(currentPage));
 	    }
+	    statusBar.setText(String.format("%1$d/%2$d", currentPage+1, pages.size()));
 	}
     }
     
@@ -128,6 +129,7 @@ public class MainWindow extends JFrame {
 	    if (currentPage < pages.size()) {
 		drawPanel.drawPage(pages.get(currentPage));
 	    }
+	    statusBar.setText(String.format("%1$d/%2$d", currentPage+1, pages.size()));
 	}
     }
 
@@ -139,6 +141,7 @@ public class MainWindow extends JFrame {
 	    if (currentPage + 1 < pages.size()) {
 		currentPage = currentPage + 1;
 		drawPanel.drawPage(pages.get(currentPage));
+		statusBar.setText(String.format("%1$d/%2$d", currentPage+1, pages.size()));
 	    }
 	}
     }
@@ -153,6 +156,7 @@ public class MainWindow extends JFrame {
 	    }
 	    if (currentPage < pages.size()) {
 		drawPanel.drawPage(pages.get(currentPage));
+		statusBar.setText(String.format("%1$d/%2$d", currentPage+1, pages.size()));
 	    }
 	}
     }
@@ -169,6 +173,7 @@ public class MainWindow extends JFrame {
 	    }
 	    if (currentPage < pages.size()) {
 		drawPanel.drawPage(pages.get(currentPage));
+		statusBar.setText(String.format("%1$d/%2$d", currentPage+1, pages.size()));
 	    }
 	}
     }

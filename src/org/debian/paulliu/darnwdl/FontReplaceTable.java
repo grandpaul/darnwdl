@@ -19,26 +19,84 @@ package org.debian.paulliu.darnwdl;
 
 public class FontReplaceTable {
     private java.util.HashSet<String> availableFonts;
-    private java.util.HashMap<String, java.util.LinkedList<String> > replacements;
+    private java.util.HashMap<String, java.util.LinkedList<String> > replacementsData;
+    private java.util.HashMap<String, String> replacements;
     private static org.debian.paulliu.darnwdl.FontReplaceTable instance = null;
 
-    private void initReplacements() {
-	replacements = new java.util.HashMap<String, java.util.LinkedList<String> >();
+    private void initReplacementsData() {
+	replacementsData = new java.util.HashMap<String, java.util.LinkedList<String> >();
 
 	java.util.LinkedList<String> list1;
 
 	list1 = new java.util.LinkedList<String>();
+	list1.add("DFKai-sb");
 	list1.add("AR PL UKai TW");
+	list1.add("AR PL KaitiM Big5");
 	list1.add("Serif");
-	replacements.put("標楷體", list1);
-	replacements.put("@標楷體", list1);
+	replacementsData.put("標楷體", list1);
+	replacementsData.put("@標楷體", list1);
 
 	list1 = new java.util.LinkedList<String>();
+	list1.add("Mingliu");
 	list1.add("AR PL UMing TW");
+	list1.add("AR PL Mingti2L Big5");
 	list1.add("SansSerif");
-	replacements.put("新細明體", list1);
-	replacements.put("細明體", list1);
+	replacementsData.put("細明體", list1);
+
+	list1 = new java.util.LinkedList<String>();
+	list1.add("PMingliu");
+	list1.add("AR PL UMing TW");
+	list1.add("AR PL Mingti2L Big5");
+	list1.add("SansSerif");
+	replacementsData.put("新細明體", list1);
 	
+	list1 = new java.util.LinkedList<String>();
+	list1.add("SansSerif");
+	replacementsData.put("Times New Roman", list1);
+
+	list1 = new java.util.LinkedList<String>();
+	list1.add("Serif");
+	replacementsData.put("Arial", list1);
+
+	list1 = new java.util.LinkedList<String>();
+	list1.add("simsun");
+	list1.add("AR PL UMing CN");
+	list1.add("AR PL SungtiL GB");
+	list1.add("SansSerif");
+	replacementsData.put("宋体", list1);
+
+	list1 = new java.util.LinkedList<String>();
+	list1.add("simhei");
+	list1.add("WenQuanYi Zen Hei");
+	list1.add("Kochi Gothic");
+	list1.add("Sazanami Gothic");
+	list1.add("VL Gothic");
+	list1.add("TakaoGothic");
+	list1.add("Serif");
+	replacementsData.put("黑体", list1);
+
+	list1 = new java.util.LinkedList<String>();
+	list1.add("AR PL KaitiM GB");
+	list1.add("AR PL UKai CN");
+	list1.add("Serif");
+	replacementsData.put("楷体_GB2312", list1);
+
+	list1 = new java.util.LinkedList<String>();
+	list1.add("AR PL SungtiL GB");
+	list1.add("AR PL UMing CN");
+	list1.add("SansSerif");
+	replacementsData.put("仿宋_GB2312", list1);
+
+	replacements = new java.util.HashMap<String, String>();
+	
+	for (String key : replacementsData.keySet()) {
+	    for (String data : replacementsData.get(key)) {
+		if (getAvailableFonts().contains(data)) {
+		    replacements.put(key, data);
+		    break;
+		}
+	    }
+	}
     }
 
     public String getFontReplacement(String fontName) {
@@ -48,12 +106,7 @@ public class FontReplaceTable {
 	if (!replacements.containsKey(fontName)) {
 	    return "Serif";
 	}
-	for (String ret : replacements.get(fontName)) {
-	    if (getAvailableFonts().contains(ret)) {
-		return ret;
-	    }
-	}
-	return "Serif";
+	return replacements.get(fontName);
     }
 
     public java.util.HashSet<String> getAvailableFonts() {
@@ -69,12 +122,21 @@ public class FontReplaceTable {
     
     public FontReplaceTable() {
 	java.awt.GraphicsEnvironment graphicsEnv = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment();
-	availableFonts = new java.util.HashSet<String> ();
+	availableFonts = new java.util.LinkedHashSet<String> ();
 	
 	String[] families = graphicsEnv.getAvailableFontFamilyNames(java.util.Locale.ENGLISH);
 	for (String family : families) {
-	    availableFonts.add(family);
+	    if (!availableFonts.contains(family)) {
+		availableFonts.add(family);
+	    }
 	}
-	initReplacements();
+
+	families = graphicsEnv.getAvailableFontFamilyNames();
+	for (String family : families) {
+	    if (!availableFonts.contains(family)) {
+		availableFonts.add(family);
+	    }
+	}
+	initReplacementsData();
     }
 }
