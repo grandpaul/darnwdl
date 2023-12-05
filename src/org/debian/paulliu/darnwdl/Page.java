@@ -93,9 +93,9 @@ public class Page {
 			    }
 			    if (indexBC >= 0) {
 				org.debian.paulliu.darnwdl.wdlo.BC bc = new org.debian.paulliu.darnwdl.wdlo.BC(indexList.get(indexBC));
-				char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, bc.getColor());
+				//char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, bc.getColor());
 			    } else {
-				char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, java.awt.Color.WHITE);
+				//char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, java.awt.Color.WHITE);
 			    }
 			    logger.info(String.format("Draw string %1$s at (%2$f, %3$f)", char1, (float)((currentX + etData.x) * renderFactor), (float)(etData.y * renderFactor)));
 			    graphics2D.drawString(char2.getIterator(), (float)((currentX + etData.x) * renderFactor), (float)(etData.y * renderFactor + font1Metrics.getAscent()));
@@ -114,9 +114,9 @@ public class Page {
 			}
 			if (indexBC >= 0) {
 			    org.debian.paulliu.darnwdl.wdlo.BC bc = new org.debian.paulliu.darnwdl.wdlo.BC(indexList.get(indexBC));
-			    char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, bc.getColor());
+			    //char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, bc.getColor());
 			} else {
-			    char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, java.awt.Color.WHITE);
+			    //char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, java.awt.Color.WHITE);
 			}
 			logger.info(String.format("Draw string %1$s at (%2$f, %3$f)", str, (float)(etData.x * renderFactor), (float)(etData.y * renderFactor)));
 			graphics2D.drawString(char2.getIterator(), (float)(etData.x * renderFactor), (float)(etData.y * renderFactor + font1Metrics.getAscent()));
@@ -159,9 +159,9 @@ public class Page {
 			    }
 			    if (indexBC >= 0) {
 				org.debian.paulliu.darnwdl.wdlo.BC bc = new org.debian.paulliu.darnwdl.wdlo.BC(indexList.get(indexBC));
-				char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, bc.getColor());
+				//char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, bc.getColor());
 			    } else {
-				char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, java.awt.Color.WHITE);
+				//char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, java.awt.Color.WHITE);
 			    }
 			    logger.info(String.format("Draw string %1$s at (%2$f, %3$f), fontAscent: %4$f", char1, (float)((currentX + utData.x) * renderFactor), (float)(utData.y * renderFactor), (float)font1Metrics.getAscent()));
 			    graphics2D.drawString(char2.getIterator(), (float)((currentX + utData.x) * renderFactor), (float)(utData.y * renderFactor + font1Metrics.getAscent()));
@@ -180,9 +180,9 @@ public class Page {
 			}
 			if (indexBC >= 0) {
 			    org.debian.paulliu.darnwdl.wdlo.BC bc = new org.debian.paulliu.darnwdl.wdlo.BC(indexList.get(indexBC));
-			    char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, bc.getColor());
+			    //char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, bc.getColor());
 			} else {
-			    char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, java.awt.Color.WHITE);
+			    //char2.addAttribute(java.awt.font.TextAttribute.BACKGROUND, java.awt.Color.WHITE);
 			}
 			logger.info(String.format("Draw string %1$s at (%2$f, %3$f), fontAscent: %4$f", str, (float)((currentX + utData.x) * renderFactor), (float)(utData.y * renderFactor), (float)font1Metrics.getAscent()));
 			graphics2D.drawString(char2.getIterator(), (float)(utData.x * renderFactor), (float)(utData.y * renderFactor + font1Metrics.getAscent()));
