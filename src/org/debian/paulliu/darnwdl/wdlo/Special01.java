@@ -59,6 +59,15 @@ public class Special01 extends org.debian.paulliu.darnwdl.wdlo.Index {
 	return b.length;
     }
 
+    private int strlen_UTF16(byte[] b) {
+	for (int i=0; i+1<b.length; i++) {
+	    if (b[i] == 0 && b[i+1] == 0) {
+		return i;
+	    }
+	}
+	return b.length;
+    }
+
     private int strcmpABN(byte[] a, int aIndex, byte[] b, int bIndex, int N) {
 	for (int i=0; i<N; i++) {
 	    if (i+aIndex >= a.length) {
@@ -157,12 +166,18 @@ public class Special01 extends org.debian.paulliu.darnwdl.wdlo.Index {
     public String getFontFaceString() {
 	String ret;
 	int len = strlen(getFontFace());
-	
-	if (getFontFaceCharsetGuess() != null) {
-	    ret = new String(getFontFace(), 0, len, getFontFaceCharsetGuess());
-	} else {
+	if (getFontFaceCharsetGuess() == null) {
 	    ret = new String(getFontFace(), 0, len, java.nio.charset.Charset.forName("big5"));
+	    return ret;
 	}
+
+	if (getFontFaceCharsetGuess() == java.nio.charset.StandardCharsets.UTF_16LE) {
+	    len = strlen_UTF16(getFontFace());
+	    ret = new String(getFontFace(), 0, len, getFontFaceCharsetGuess());
+	    return ret;
+	}
+	ret = new String(getFontFace(), 0, len, getFontFaceCharsetGuess());
+
 	return ret;
     }
 

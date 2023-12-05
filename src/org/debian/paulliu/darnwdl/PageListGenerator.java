@@ -24,9 +24,19 @@ import java.util.*;
 public class PageListGenerator {
 
     private org.debian.paulliu.darnwdl.WPass2 wPass2;
+    private int maxWidth;
+    private int maxHeight;
 
     public PageListGenerator(org.debian.paulliu.darnwdl.WPass2 wPass2) {
 	this.wPass2 = wPass2;
+	this.maxWidth = 1024;
+	this.maxHeight = 768;
+    }
+
+    public java.awt.Dimension getMaxDimension() {
+	java.awt.Dimension ret;
+	ret = new java.awt.Dimension(this.maxWidth, this.maxHeight);
+	return ret;
     }
 
     public org.debian.paulliu.darnwdl.WPass2 getWPass2() {
@@ -44,6 +54,13 @@ public class PageListGenerator {
 	    index1 = indexList.get(i);
 	    if (index1.getTag() != null && index1.getTag().compareTo("CR") == 0) {
 		lastCR = i;
+		org.debian.paulliu.darnwdl.wdlo.CR cr = new org.debian.paulliu.darnwdl.wdlo.CR(indexList.get(i));
+		if ((int)cr.getRectangle().getWidth() > maxWidth) {
+		    maxWidth = (int)cr.getRectangle().getWidth();
+		}
+		if ((int)cr.getRectangle().getHeight() > maxHeight) {
+		    maxHeight = (int)cr.getRectangle().getHeight();
+		}
 	    }
 	    if (index1.getTag() == null || index1.getTag().compareTo("R2") != 0) {
 		i++;
@@ -52,6 +69,13 @@ public class PageListGenerator {
 	    for (j=i+1; j<indexList.size(); j++) {
 		if (indexList.get(j).getTag() != null && indexList.get(j).getTag().compareTo("CR") == 0) {
 		    lastCR = j;
+		    org.debian.paulliu.darnwdl.wdlo.CR cr = new org.debian.paulliu.darnwdl.wdlo.CR(indexList.get(j));
+		    if ((int)cr.getRectangle().getWidth() > maxWidth) {
+			maxWidth = (int)cr.getRectangle().getWidth();
+		    }
+		    if ((int)cr.getRectangle().getHeight() > maxHeight) {
+			maxHeight = (int)cr.getRectangle().getHeight();
+		    }
 		}
 		if (indexList.get(j).getTag() == null || indexList.get(j).getTag().compareTo("R2") == 0) {
 		    break;

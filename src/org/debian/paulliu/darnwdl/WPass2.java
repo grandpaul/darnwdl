@@ -215,8 +215,8 @@ public class WPass2 {
 		} else if (tag.compareTo("UT") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
-		    if (lastFT != -1) {
-			wdloIndex.setReference("FT", lastFT);
+		    if (lastUF != -1) {
+			wdloIndex.setReference("UF", lastUF);
 		    }
 		    if (lastTC != -1) {
 			wdloIndex.setReference("TC", lastTC);

@@ -38,12 +38,17 @@ public class Main {
     private java.util.logging.Logger logger = null;
     public static String loggerName = "MainLogger";
     private JFrame mainWindow = null;
+    private java.io.File wdlFile = null;
 
     /**
      * Init class data here
      */
     private void init() {
-	mainWindow = new org.debian.paulliu.darnwdl.ui.MainWindow();
+	if (wdlFile != null) {
+	    mainWindow = new org.debian.paulliu.darnwdl.ui.MainWindow(wdlFile);
+	} else {
+	    mainWindow = new org.debian.paulliu.darnwdl.ui.MainWindow();
+	}
     }
 
     /**
@@ -205,13 +210,21 @@ public class Main {
 	}
 	if (args.length >= 1 && args[0].equals("font")) {
 	    java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.INFO);
-	    org.debian.paulliu.darnwdl.ui.FontReplaceTable ft = new org.debian.paulliu.darnwdl.ui.FontReplaceTable();
+	    org.debian.paulliu.darnwdl.FontReplaceTable frt = org.debian.paulliu.darnwdl.FontReplaceTable.getInstance();
+	    for (String fontName : frt.getAvailableFonts()) {
+		System.out.println(fontName);
+	    }
 	    return;
 	}
 	java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.SEVERE);
 	for (int i=0; args!=null && i<args.length; i++) {
 	    if (args[i].equals("debug")) {
 		java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.INFO);
+	    }
+	}
+	for (int i=0; args != null && i<args.length; i++) {
+	    if (args[i].toUpperCase().endsWith(".WDLO") || args[i].toUpperCase().endsWith(".WDL")) {
+		myMain.wdlFile = new java.io.File(args[i]);
 	    }
 	}
 	myMain.begin();

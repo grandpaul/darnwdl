@@ -18,11 +18,63 @@
 package org.debian.paulliu.darnwdl;
 
 public class FontReplaceTable {
+    private java.util.HashSet<String> availableFonts;
+    private java.util.HashMap<String, java.util.LinkedList<String> > replacements;
+    private static org.debian.paulliu.darnwdl.FontReplaceTable instance = null;
+
+    private void initReplacements() {
+	replacements = new java.util.HashMap<String, java.util.LinkedList<String> >();
+
+	java.util.LinkedList<String> list1;
+
+	list1 = new java.util.LinkedList<String>();
+	list1.add("AR PL UKai TW");
+	list1.add("Serif");
+	replacements.put("標楷體", list1);
+	replacements.put("@標楷體", list1);
+
+	list1 = new java.util.LinkedList<String>();
+	list1.add("AR PL UMing TW");
+	list1.add("SansSerif");
+	replacements.put("新細明體", list1);
+	replacements.put("細明體", list1);
+	
+    }
+
+    public String getFontReplacement(String fontName) {
+	if (getAvailableFonts().contains(fontName)) {
+	    return fontName;
+	}
+	if (!replacements.containsKey(fontName)) {
+	    return "Serif";
+	}
+	for (String ret : replacements.get(fontName)) {
+	    if (getAvailableFonts().contains(ret)) {
+		return ret;
+	    }
+	}
+	return "Serif";
+    }
+
+    public java.util.HashSet<String> getAvailableFonts() {
+	return availableFonts;
+    }
+
+    public static org.debian.paulliu.darnwdl.FontReplaceTable getInstance() {
+	if (instance == null) {
+	    instance = new org.debian.paulliu.darnwdl.FontReplaceTable();
+	}
+	return instance;
+    }
+    
     public FontReplaceTable() {
 	java.awt.GraphicsEnvironment graphicsEnv = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment();
+	availableFonts = new java.util.HashSet<String> ();
+	
 	String[] families = graphicsEnv.getAvailableFontFamilyNames(java.util.Locale.ENGLISH);
 	for (String family : families) {
-	    System.out.println(family);
+	    availableFonts.add(family);
 	}
+	initReplacements();
     }
 }
