@@ -36,20 +36,25 @@ public class DrawPanel extends JPanel {
 	super();
 	this.setPreferredSize(new Dimension(1024,768));
     }
-
+    
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 	if (image1 != null) {
-	    this.setPreferredSize(new Dimension(image1.getWidth(null),image1.getHeight(null)));
+	    ImageIcon image1icon = new ImageIcon(image1);
+	    this.setPreferredSize(new Dimension(image1icon.getIconWidth(),image1icon.getIconHeight()));
 	    g.drawImage(image1, 0, 0, java.awt.Color.WHITE, null);
 	}
     }
 
-    public void drawPage(org.debian.paulliu.darnwdl.Page page1) {
-	java.awt.Image img;
-	img = page1.render();
-	image1 = img;
+    public void drawImage(java.awt.Image img) {
+	this.image1 = img;
+	this.repaint();
+    }
+
+    public void clearImage() {
+	image1 = null;
+	this.setPreferredSize(new Dimension(1024,768));
 	this.repaint();
     }
     

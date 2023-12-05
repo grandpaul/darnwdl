@@ -36,6 +36,9 @@ public class MainWindow extends JFrame {
     private JLabel statusBar = null;
     private java.util.ArrayList <org.debian.paulliu.darnwdl.Page> pages = null;
     private int currentPage = 0;
+    private java.awt.Dimension viewportDimension = null;
+    private double scaleFactor = 1.0;
+    private int fitType = 0;
 
     public MainWindow() {
 	super("darnwdl");
@@ -56,8 +59,42 @@ public class MainWindow extends JFrame {
 	openFile(wdlFile);
     }
 
+    private java.awt.image.BufferedImage resizeImage(java.awt.Image originalImage, int targetWidth, int targetHeight) {
+	java.awt.image.BufferedImage resizedImage = new java.awt.image.BufferedImage(targetWidth, targetHeight, java.awt.image.BufferedImage.TYPE_INT_RGB);
+	java.awt.Graphics2D graphics2D = resizedImage.createGraphics();
+	graphics2D.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
+	graphics2D.dispose();
+	return resizedImage;
+    }
+
+    private void drawPage() {
+	org.debian.paulliu.darnwdl.Page page = pages.get(currentPage);
+	java.awt.Image img = page.render();
+	javax.swing.ImageIcon image1icon = new javax.swing.ImageIcon(img);
+	double imgWidth = (double)image1icon.getIconWidth();
+	double imgHeight = (double)image1icon.getIconHeight();
+	
+	if (fitType == 0 && scaleFactor == 1.0) {
+	    /* Do nothing */
+	} else if (fitType == 0) {
+	    img = resizeImage(img, (int)(imgWidth * scaleFactor), (int)(imgHeight * scaleFactor));
+	} else if (fitType == 1) {
+	    scaleFactor = viewportDimension.getWidth() / imgWidth;
+	    img = resizeImage(img, (int)(imgWidth * scaleFactor), (int)(imgHeight * scaleFactor));
+	} else if (fitType == 2) {
+	    scaleFactor = viewportDimension.getHeight() / imgHeight;
+	    img = resizeImage(img, (int)(imgWidth * scaleFactor), (int)(imgHeight * scaleFactor));
+	} else if (fitType == 3) {
+	    scaleFactor = Math.min(viewportDimension.getWidth() / imgWidth, viewportDimension.getHeight() / imgHeight);
+	    img = resizeImage(img, (int)(imgWidth * scaleFactor), (int)(imgHeight * scaleFactor));
+	}
+	drawPanel.drawImage(img);
+
+    }
     
     private void openFile(java.io.File wdlFile) {
+	this.scaleFactor = 1.0;
+	this.fitType = 0;
 	java.io.File wdloFile = null;
 	if (wdlFile.getName().toUpperCase().endsWith(".WDL")) {
 	    try {
@@ -76,7 +113,7 @@ public class MainWindow extends JFrame {
 	    pages = pageListGenerator.getPageList();
 	    currentPage = 0;
 	    if (currentPage < pages.size()) {
-		drawPanel.drawPage(pages.get(currentPage));
+		drawPage();
 	    }
 	    statusBar.setText(String.format("%1$d/%2$d", currentPage+1, pages.size()));
 	}
@@ -120,6 +157,53 @@ public class MainWindow extends JFrame {
 	}
     }
 
+    private class ToolboxButtonCloseActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    pages = null;
+	    currentPage = 0;
+	    drawPanel.clearImage();
+	}
+    }
+
+    private class ToolboxButtonFitPActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    fitType=3;
+	    drawPage();
+	}
+    }
+
+    private class ToolboxButtonFitWActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    fitType=1;
+	    drawPage();
+	}
+    }
+    
+    private class ToolboxButtonFitHActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    fitType=2;
+	    drawPage();
+	}
+    }
+
+    private class ToolboxButtonZoomInActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    fitType=0;
+	    scaleFactor += 0.1;
+	    drawPage();
+	}
+    }
+
+    private class ToolboxButtonZoomOutActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    fitType=0;
+	    if (scaleFactor >= 0.2) {
+		scaleFactor -= 0.1;
+	    }
+	    drawPage();
+	}
+    }
+    
     private class ToolboxButtonFirstActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 	    currentPage = 0;
@@ -127,7 +211,7 @@ public class MainWindow extends JFrame {
 		return;
 	    }
 	    if (currentPage < pages.size()) {
-		drawPanel.drawPage(pages.get(currentPage));
+		drawPage();
 	    }
 	    statusBar.setText(String.format("%1$d/%2$d", currentPage+1, pages.size()));
 	}
@@ -140,7 +224,7 @@ public class MainWindow extends JFrame {
 	    }
 	    if (currentPage + 1 < pages.size()) {
 		currentPage = currentPage + 1;
-		drawPanel.drawPage(pages.get(currentPage));
+		drawPage();
 		statusBar.setText(String.format("%1$d/%2$d", currentPage+1, pages.size()));
 	    }
 	}
@@ -155,7 +239,7 @@ public class MainWindow extends JFrame {
 		currentPage = currentPage - 1;
 	    }
 	    if (currentPage < pages.size()) {
-		drawPanel.drawPage(pages.get(currentPage));
+		drawPage();
 		statusBar.setText(String.format("%1$d/%2$d", currentPage+1, pages.size()));
 	    }
 	}
@@ -172,7 +256,7 @@ public class MainWindow extends JFrame {
 		currentPage = 0;
 	    }
 	    if (currentPage < pages.size()) {
-		drawPanel.drawPage(pages.get(currentPage));
+		drawPage();
 		statusBar.setText(String.format("%1$d/%2$d", currentPage+1, pages.size()));
 	    }
 	}
@@ -290,6 +374,7 @@ public class MainWindow extends JFrame {
 		logger.info("Rectangle: " + r1.toString());
 		viewPortWidth = r1.getWidth();
 		viewPortHeight = r1.getHeight();
+		viewportDimension = new java.awt.Dimension((int)(viewPortWidth), (int)viewPortHeight);
 	    }
 	}
 	@Override
@@ -388,6 +473,12 @@ public class MainWindow extends JFrame {
 	toolBox.add(toolBoxButton_Last);
 
 	toolBoxButton_Open.addActionListener(new ToolboxButtonOpenActionListener());
+	toolBoxButton_Close.addActionListener(new ToolboxButtonCloseActionListener());
+	toolBoxButton_FitP.addActionListener(new ToolboxButtonFitPActionListener());
+	toolBoxButton_FitW.addActionListener(new ToolboxButtonFitWActionListener());
+	toolBoxButton_FitH.addActionListener(new ToolboxButtonFitHActionListener());
+	toolBoxButton_ZoomIn.addActionListener(new ToolboxButtonZoomInActionListener());
+	toolBoxButton_ZoomOut.addActionListener(new ToolboxButtonZoomOutActionListener());
 	toolBoxButton_First.addActionListener(new ToolboxButtonFirstActionListener());
 	toolBoxButton_Back.addActionListener(new ToolboxButtonBackActionListener());
 	toolBoxButton_Forward.addActionListener(new ToolboxButtonForwardActionListener());
