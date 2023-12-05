@@ -279,7 +279,6 @@ public class Page {
 			if (lineWidth < 1.0) {
 			    lineWidth = 1.0;
 			}
-			System.out.println(lineWidth);
 			if (sp03.getStyle() == 2) {
 			    java.awt.Stroke dashed = new java.awt.BasicStroke((int)lineWidth, java.awt.BasicStroke.CAP_BUTT, java.awt.BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
 			    graphics2D.setStroke(dashed);
