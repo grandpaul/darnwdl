@@ -135,6 +135,9 @@ public class WPass2 {
 		    if (lastTC != -1) {
 			wdloIndex.setReference("TC", lastTC);
 		    }
+		    if (lastBC != -1) {
+			wdloIndex.setReference("BC", lastBC);
+		    }
 		} else if (tag.compareTo("EU") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
@@ -143,6 +146,9 @@ public class WPass2 {
 		    }
 		    if (lastTC != -1) {
 			wdloIndex.setReference("TC", lastTC);
+		    }
+		    if (lastBC != -1) {
+			wdloIndex.setReference("BC", lastBC);
 		    }
 		} else if (tag.compareTo("FR") == 0) {
 		    long seeklen = readInt16();
@@ -153,6 +159,12 @@ public class WPass2 {
 		    if (lastBH != -1) {
 			wdloIndex.setReference("BH", lastBH);
 		    }
+		    if (lastTC != -1) {
+			wdloIndex.setReference("TC", lastTC);
+		    }
+		    if (lastBC != -1) {
+			wdloIndex.setReference("BC", lastBC);
+		    }
 		} else if (tag.compareTo("CP") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
@@ -162,6 +174,12 @@ public class WPass2 {
 		    if (lastPN != -1) {
 			wdloIndex.setReference("PN", lastPN);
 		    }
+		    if (lastTC != -1) {
+			wdloIndex.setReference("TC", lastTC);
+		    }
+		    if (lastBC != -1) {
+			wdloIndex.setReference("BC", lastBC);
+		    }
 		} else if (tag.compareTo("AP") == 0) {
 		    long seeklen = readInt16();
 		    inputFileStream.seek(inputFileStream.getFilePointer() + seeklen);
@@ -170,6 +188,12 @@ public class WPass2 {
 		    }
 		    if (lastBH != -1) {
 			wdloIndex.setReference("BH", lastBH);
+		    }
+		    if (lastTC != -1) {
+			wdloIndex.setReference("TC", lastTC);
+		    }
+		    if (lastBC != -1) {
+			wdloIndex.setReference("BC", lastBC);
 		    }
 		} else if (tag.compareTo("AQ") == 0) {
 		    long seeklen = readInt16();
@@ -220,6 +244,9 @@ public class WPass2 {
 		    }
 		    if (lastTC != -1) {
 			wdloIndex.setReference("TC", lastTC);
+		    }
+		    if (lastBC != -1) {
+			wdloIndex.setReference("BC", lastBC);
 		    }
 		} else if (tagBuf[1] == 0) {
 		    long seeklen = readInt32();
