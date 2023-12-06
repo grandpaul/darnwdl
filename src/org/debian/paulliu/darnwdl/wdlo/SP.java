@@ -20,7 +20,7 @@
 package org.debian.paulliu.darnwdl.wdlo;
 
 /**
- * This class is for UTF-16LE encoded text
+ * This class is for compressed image.
  */
 public class SP extends org.debian.paulliu.darnwdl.wdlo.Index {
     private java.util.logging.Logger logger;

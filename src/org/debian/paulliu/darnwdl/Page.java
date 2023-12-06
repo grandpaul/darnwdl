@@ -99,7 +99,9 @@ public class Page {
 			    }
 			    logger.info(String.format("Draw string %1$s at (%2$f, %3$f)", char1, (float)((currentX + etData.x) * renderFactor), (float)(etData.y * renderFactor)));
 			    graphics2D.drawString(char2.getIterator(), (float)((currentX + etData.x) * renderFactor), (float)(etData.y * renderFactor + font1Metrics.getAscent()));
-			    currentX += etData.getWidth().get(j).intValue();
+			    if (j < etData.getWidth().size()) {
+				currentX += etData.getWidth().get(j).intValue();
+			    }
 			}
 		    } else {
 			java.awt.Font font1 = new java.awt.Font(org.debian.paulliu.darnwdl.FontReplaceTable.getInstance().getFontReplacement(fontName), java.awt.Font.PLAIN, (int)(fontSize * renderFactor));

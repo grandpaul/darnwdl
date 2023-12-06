@@ -255,6 +255,25 @@ public class Main {
 	    }
 	    return;
 	}
+	if (args.length >= 2 && args[0].equals("print")) {
+	    java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.WARNING);
+	    java.io.File wdlFile = new java.io.File(args[1]);
+	    java.io.File wdloFile = null;
+	    try {
+		java.nio.file.Path wdloFilePath = java.nio.file.Files.createTempFile("darnwdl", ".wdlo");
+		wdloFile = wdloFilePath.toFile();
+	    } catch (java.io.IOException e) {
+		java.util.logging.Logger.getLogger(Main.loggerName).severe(String.format("Cannot create temporary file %1$s", e.toString()));
+	    }
+	    org.debian.paulliu.darnwdl.WPass1 wPass1 = new org.debian.paulliu.darnwdl.WPass1(wdlFile, wdloFile);
+	    if (wdloFile != null) {
+		org.debian.paulliu.darnwdl.WPass2 wPass2 = new org.debian.paulliu.darnwdl.WPass2(wdloFile);
+		org.debian.paulliu.darnwdl.PageListGenerator pageListGenerator = new org.debian.paulliu.darnwdl.PageListGenerator (wPass2);
+		org.debian.paulliu.darnwdl.PagesPrintable pagesPrintable = new org.debian.paulliu.darnwdl.PagesPrintable(pageListGenerator);
+		pagesPrintable.printAll();
+	    }		
+	    return;
+	}
 	java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.SEVERE);
 	for (int i=0; args!=null && i<args.length; i++) {
 	    if (args[i].equals("debug")) {

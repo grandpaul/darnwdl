@@ -20,7 +20,7 @@
 package org.debian.paulliu.darnwdl.wdlo;
 
 /**
- * This class is for UTF-16LE encoded text
+ * This class is for uncompressed image
  */
 public class SD extends org.debian.paulliu.darnwdl.wdlo.Index {
     private java.util.logging.Logger logger;
@@ -166,7 +166,7 @@ public class SD extends org.debian.paulliu.darnwdl.wdlo.Index {
 			graphData[(i*srcWidth+j)*3+1] = paletteData[cIndex * 4 + 1];
 			graphData[(i*srcWidth+j)*3+2] = paletteData[cIndex * 4];
 		    }
-		    if ( srcWidth*3%4 != 0) {
+		    if ( srcWidth%4 != 0) {
 			for (int j=0; j<4-(srcWidth%4); j++) {
 			    inputFile.read();
 			    seekLen --;

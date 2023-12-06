@@ -124,7 +124,7 @@ public class Special01 extends org.debian.paulliu.darnwdl.wdlo.Index {
 		    fontFaceCharsetGuess = null;
 		    for (int i=0; i<gb2312Fonts.length; i++) {
 			if (strcmpABN(fontFace, 0, gb2312Fonts[i], 0, Math.min(fontFace.length, gb2312Fonts[i].length)) == 0) {
-			    fontFaceCharsetGuess = java.nio.charset.Charset.forName("gb2312");
+			    fontFaceCharsetGuess = java.nio.charset.Charset.forName("gb18030");
 			    break;
 			}
 		    }
