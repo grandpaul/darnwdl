@@ -38,6 +38,7 @@ public class MainWindow extends JFrame {
     private int currentPage = 0;
     private double scaleFactor = 1.0;
     private int fitType = 0;
+    private ResourceBundle resources = ResourceBundle.getBundle("darnwdl");
 
     public MainWindow() {
 	super("darnwdl");
@@ -56,6 +57,42 @@ public class MainWindow extends JFrame {
 	init();
 
 	openFile(wdlFile);
+    }
+
+    /**
+     * Load an icon from jar and resize the maximum side to iconSize
+     *
+     * @fileName the filename of the icon in jar
+     * @iconSize resize the icon to iconSize
+     * @return an ImageIcon
+     */
+    private ImageIcon loadIcon(String fileName, int iconSize){
+        ImageIcon ret = null;
+        ImageIcon orig = null;
+	if (fileName.endsWith(".svg")) {
+	    org.debian.paulliu.darnwdl.ui.SvgImage svgImage = null;
+	    try {
+		svgImage = new org.debian.paulliu.darnwdl.ui.SvgImage(getClass().getResource(fileName));
+	    } catch (java.io.IOException e) {
+		logger.severe(String.format("Cannot load SVG image: %1$s", fileName));
+	    }
+	    java.awt.Image im1 = null;
+	    im1 = svgImage.getImage(32, 32);
+	    orig = new javax.swing.ImageIcon(im1);
+	} else {
+	    orig = new javax.swing.ImageIcon(getClass().getResource(fileName));
+	}
+        if (orig != null) {
+            Image im = orig.getImage();
+            Image imScaled = null;
+            if (im.getWidth(null) > im.getHeight(null)) {
+                imScaled = im.getScaledInstance(iconSize,-1,Image.SCALE_SMOOTH);
+            } else {
+                imScaled = im.getScaledInstance(-1,iconSize,Image.SCALE_SMOOTH);
+            }
+            ret = new javax.swing.ImageIcon(imScaled);
+        }
+        return ret;
     }
 
     private java.awt.image.BufferedImage resizeImage01(java.awt.Image originalImage, int targetWidth, int targetHeight) {
@@ -347,7 +384,7 @@ public class MainWindow extends JFrame {
 	JMenuBar jMenuBar = new JMenuBar();
 	JMenu jMenu_File = new JMenu("File");
         JMenuItem jMenuItem_File_New = createMenuItem("New", "FileView.fileIcon");
-        JMenuItem jMenuItem_File_Open = createMenuItem("Open", "Tree.openIcon");
+        JMenuItem jMenuItem_File_Open = createMenuItem(resources.getString("Open"), "Tree.openIcon");
         JMenuItem jMenuItem_File_Save = createMenuItem("Save", "FileView.floppyDriveIcon");
         JMenuItem jMenuItem_File_SaveAs = createMenuItem("Save As", "FileView.floppyDriveIcon");
         JMenuItem jMenuItem_File_Quit = createMenuItem("Quit", "InternalFrame.closeIcon");
@@ -614,6 +651,8 @@ public class MainWindow extends JFrame {
 
 	statusBar = new JLabel(" ");
 	cp.add(statusBar, BorderLayout.SOUTH);
+
+	setIconImage(loadIcon("/pixmaps/darnwdlicon.svg", 10).getImage());
 
 	panel.revalidate();
     }
