@@ -11,11 +11,12 @@
 	  <pathelement path="/usr/share/java/batik-dom.jar" />
 	  <pathelement path="/usr/share/java/batik-svg-dom.jar" />
 	  <pathelement path="/usr/share/java/batik-anim.jar" />
+	  <pathelement path="/usr/share/java/xml-apis.jar" />
 	</path>
 
 	<target name="build">
 	  <mkdir dir="${build.dir}"/>
-	  <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="true">
+	  <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="true" encoding="UTF-8">
 	    <classpath refid="maincp">
 	    </classpath>
 
@@ -53,7 +54,7 @@
 	    <manifest>
 	      <attribute name="Manifest-Version" value="1.0" />
 	      <attribute name="Main-Class" value="org.debian.paulliu.darnwdl.Main" />
-	      <attribute name="Class-Path" value="${jar.classpath} /usr/share/java/junit.jar /usr/share/java/batik-bridge.jar /usr/share/java/batik-dom.jar /usr/share/java/batik-svg-dom.jar /usr/share/java/batik-anim.jar" />
+	      <attribute name="Class-Path" value="${jar.classpath} /usr/share/java/junit.jar /usr/share/java/batik-bridge.jar /usr/share/java/batik-dom.jar /usr/share/java/batik-svg-dom.jar /usr/share/java/batik-anim.jar /usr/share/java/xml-apis.jar" />
 	    </manifest>
 	  </jar>
 	</target>
