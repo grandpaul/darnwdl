@@ -234,7 +234,7 @@ public class WPass1 {
 	if (! openOutputFile()) {
 	    return;
 	}
-	System.out.println("Start decoding");
+	logger.info("Start decoding");
 	if (! decode()) {
 	    return;
 	}
