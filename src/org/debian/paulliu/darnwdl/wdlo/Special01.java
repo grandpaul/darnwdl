@@ -60,7 +60,7 @@ public class Special01 extends org.debian.paulliu.darnwdl.wdlo.Index {
     }
 
     private int strlen_UTF16(byte[] b) {
-	for (int i=0; i+1<b.length; i++) {
+	for (int i=0; i+1<b.length; i+=2) {
 	    if (b[i] == 0 && b[i+1] == 0) {
 		return i;
 	    }

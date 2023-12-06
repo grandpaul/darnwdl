@@ -221,8 +221,7 @@ public class Page {
 		for (java.awt.geom.Path2D.Float line : lines) {
 		    float[] coords = new float[6];
 		    java.awt.geom.Path2D.Float lineToDraw = new java.awt.geom.Path2D.Float();
-		    java.awt.geom.PathIterator pathIterator = line.getPathIterator(new java.awt.geom.AffineTransform());
-		    while (!pathIterator.isDone()) {
+		    for (java.awt.geom.PathIterator pathIterator = line.getPathIterator(new java.awt.geom.AffineTransform()); !pathIterator.isDone(); pathIterator.next()) {
 			switch (pathIterator.currentSegment(coords)) {
 			case java.awt.geom.PathIterator.SEG_MOVETO:
 			    lineToDraw.moveTo(coords[0]*renderFactor, coords[1]*renderFactor);
@@ -234,7 +233,6 @@ public class Page {
 			    logger.severe("We don't handle splines");
 			    break;
 			}
-			pathIterator.next();
 		    }
 		    graphics2D.draw(lineToDraw);
 		}
@@ -252,6 +250,70 @@ public class Page {
 
 		if (img != null) {
 		    graphics2D.drawImage(img, (int)(dest.getX() * renderFactor), (int)(dest.getY() * renderFactor), (int)(dest.getWidth() * renderFactor), (int)(dest.getHeight() * renderFactor), null);
+		}
+	    } else if (index1.getTag().compareTo("AP") == 0) {
+		org.debian.paulliu.darnwdl.wdlo.AP ap = new org.debian.paulliu.darnwdl.wdlo.AP(index1);
+		int fill=0;
+		int indexTC = ap.getReference("TC");
+		int indexBC = ap.getReference("BC");
+		int indexPN = ap.getReference("PN");
+		int indexBH = ap.getReference("BH");
+		if (indexTC >= 0) {
+		    org.debian.paulliu.darnwdl.wdlo.TC tc = new org.debian.paulliu.darnwdl.wdlo.TC(indexList.get(indexTC));
+		    graphics2D.setColor(tc.getColor());
+		}
+		if (indexBC >= 0) {
+		    org.debian.paulliu.darnwdl.wdlo.BC bc = new org.debian.paulliu.darnwdl.wdlo.BC(indexList.get(indexBC));
+		    graphics2D.setBackground(bc.getColor());
+		}
+		if (indexPN >= 0) {
+		    org.debian.paulliu.darnwdl.wdlo.PN pn = new org.debian.paulliu.darnwdl.wdlo.PN(indexList.get(indexPN));
+		    int indexSP03 = pn.getReference("Special03");
+		    if (indexSP03 >= 0) {
+			org.debian.paulliu.darnwdl.wdlo.Special03 sp03 = new org.debian.paulliu.darnwdl.wdlo.Special03(indexList.get(indexSP03));
+			graphics2D.setColor(sp03.getColor());
+			double lineWidth = ((double)sp03.getWidth()) * renderFactor;
+			if (sp03.getStyle() == 2) {
+			    java.awt.Stroke dashed = new java.awt.BasicStroke((int)lineWidth, java.awt.BasicStroke.CAP_BUTT, java.awt.BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+			    graphics2D.setStroke(dashed);
+			} else {
+			    java.awt.BasicStroke stroke1 = new java.awt.BasicStroke((int)lineWidth);
+			    graphics2D.setStroke(stroke1);
+			}
+		    }
+		}
+		if (indexBH >= 0) {
+		    org.debian.paulliu.darnwdl.wdlo.BH bh = new org.debian.paulliu.darnwdl.wdlo.BH(indexList.get(indexBH));
+		    int indexSP02 = bh.getReference("Special02");
+		    if (indexSP02 >= 0) {
+			org.debian.paulliu.darnwdl.wdlo.Special02 sp02 = new org.debian.paulliu.darnwdl.wdlo.Special02(indexList.get(indexSP02));
+			graphics2D.setColor(sp02.getColor());
+			fill = 1;
+		    }
+		}
+		for (java.awt.Polygon poly1 : ap.getPolygons()) {
+		    java.awt.Polygon poly1Scaled = new java.awt.Polygon();
+		    for (java.awt.geom.PathIterator pathIterator = poly1.getPathIterator(new java.awt.geom.AffineTransform()); !pathIterator.isDone(); pathIterator.next()) {
+			float[] coords = new float[6];
+			switch (pathIterator.currentSegment(coords)) {
+			case java.awt.geom.PathIterator.SEG_MOVETO:
+			    poly1Scaled.addPoint((int)(coords[0]*renderFactor), (int)(coords[1]*renderFactor));
+			    break;
+			case java.awt.geom.PathIterator.SEG_LINETO:
+			    poly1Scaled.addPoint((int)(coords[0]*renderFactor), (int)(coords[1]*renderFactor));
+			    break;
+			case java.awt.geom.PathIterator.SEG_CLOSE:
+			    break;
+			default:
+			    logger.warning("Polygon has unknown Path segment");
+			    break;
+			}
+		    }
+		    if (fill == 0) {
+			graphics2D.drawPolygon(poly1Scaled);
+		    } else {
+			graphics2D.fillPolygon(poly1Scaled);
+		    }
 		}
 	    } else if (index1.getTag().compareTo("FR") == 0) {
 		org.debian.paulliu.darnwdl.wdlo.FR fr = new org.debian.paulliu.darnwdl.wdlo.FR(index1);

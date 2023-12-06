@@ -187,6 +187,39 @@ public class Main {
 		    } else if (i.getTag().compareTo("CR") == 0) {
 			org.debian.paulliu.darnwdl.wdlo.CR cr = new org.debian.paulliu.darnwdl.wdlo.CR(i);
 			System.out.println(String.format(" rectangle: %1$s", cr.getRectangle().toString()));
+		    } else if (i.getTag().compareTo("AP") == 0) {
+			org.debian.paulliu.darnwdl.wdlo.AP ap = new org.debian.paulliu.darnwdl.wdlo.AP(i);
+			java.io.StringWriter sw = new java.io.StringWriter();
+			sw.write(" polygons: [ ");
+			for (java.awt.Polygon poly1 : ap.getPolygons()) {
+			    sw.write("[");
+			    for (java.awt.geom.PathIterator pathIterator = poly1.getPathIterator(new java.awt.geom.AffineTransform()); !pathIterator.isDone(); pathIterator.next()) {
+				float[] coords = new float[6];
+				switch (pathIterator.currentSegment(coords)) {
+				case java.awt.geom.PathIterator.SEG_MOVETO:
+				    sw.write("(");
+				    sw.write(Float.toString(coords[0]));
+				    sw.write(",");
+				    sw.write(Float.toString(coords[1]));
+				    sw.write(")");
+				    break;
+				case java.awt.geom.PathIterator.SEG_LINETO:
+				    sw.write(",(");
+				    sw.write(Float.toString(coords[0]));
+				    sw.write(",");
+				    sw.write(Float.toString(coords[1]));
+				    sw.write(")");
+				    break;
+				case java.awt.geom.PathIterator.SEG_CLOSE:
+				    break;
+				default:
+				    break;
+				}
+			    }
+			    sw.write("], ");
+			}
+			sw.write("]");
+			System.out.println(sw.toString());
 		    }
 		} else {
 		    System.out.println(String.format("special %1$d: %2$d", i.getSpecialByte(), i.getFilePointer()));
