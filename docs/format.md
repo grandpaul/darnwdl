@@ -26,7 +26,7 @@ Then skip forwardLen - 38 bytes.
  - unknown integer: 4 bytes
  - uncompressedSize: 4 bytes
  - compressedSize: 4 bytes
- - unknown integer: 4 bytes
+ - CRC32 of uncompressed Data: 4 bytes
  - data: compressedSize bytes
 
 ## PASS2
@@ -225,3 +225,65 @@ This structure describe a compressed picture.
 		if color_depth == 8, it has 4*256 bytes.
  - graphDataLen2: the length of graphData. 4 bytes.
  - graphData: graphDataLen2 bytes.
+
+### BM
+
+Unknown function.
+
+ - tag: "BM", 2 bytes
+ - unknown_short: 2 bytes
+
+### CT
+
+Unknown function.
+
+ - tag: "CT", 2 bytes
+ - unknown_short: 2 bytes
+
+### AQ
+
+Unknown function.
+
+ - tag: "AQ", 2 bytes
+ - seekLen: 2 bytes
+ - unknownData: seekLen bytes
+
+### RT
+
+Unknown function.
+
+ - tag: "RT", 2 bytes
+ - seekLen: 2 bytes
+ - unknownData: seekLen bytes
+
+### WP
+
+Unknown function.
+
+ - tag: "WP", 2 bytes
+ - seekLen: 2 bytes
+ - unknownData: seekLen bytes
+
+### XD
+
+Unknown function.
+
+ - tag: "XD", 2 bytes
+ - seekLen: 2 bytes
+ - unknownData: seekLen bytes
+
+### SX
+
+Unknown function.
+
+ - tag: "SX", 2 bytes
+ - seekLen: 2 bytes
+ - unknownData: seekLen bytes
+
+### EP
+
+Unknown function.
+
+ - tag: "EP", 2 bytes
+ - seekLen: 2 bytes
+ - unknownData: seekLen bytes

@@ -187,6 +187,22 @@ public class Main {
 		    } else if (i.getTag().compareTo("CR") == 0) {
 			org.debian.paulliu.darnwdl.wdlo.CR cr = new org.debian.paulliu.darnwdl.wdlo.CR(i);
 			System.out.println(String.format(" rectangle: %1$s", cr.getRectangle().toString()));
+		    } else if (i.getTag().compareTo("BM") == 0 || i.getTag().compareTo("CT") == 0) {
+			org.debian.paulliu.darnwdl.wdlo.Test1Short t1 = new org.debian.paulliu.darnwdl.wdlo.Test1Short(i);
+			System.out.println(String.format(" unknownShort: %1$d", t1.getUnknownShort()));
+		    } else if (i.getTag().compareTo("AQ") == 0 || i.getTag().compareTo("RT") == 0) {
+			org.debian.paulliu.darnwdl.wdlo.TestHexWithSeeklen t2 = new org.debian.paulliu.darnwdl.wdlo.TestHexWithSeeklen(i);
+			System.out.println(String.format(" seekLen: %1$d", t2.getSeekLen()));
+			java.io.StringWriter sw = new java.io.StringWriter();
+			byte[] data = t2.getUnknownBytes();
+			System.out.println(" Data:");
+			for (int j=0; j<data.length; j+=16) {
+			    System.out.print(String.format(" %1$08x ", j));
+			    for (int k=0; j+k < data.length; k++) {
+				System.out.print(String.format(" %1$02x", data[j+k]));
+			    }
+			    System.out.println();
+			}
 		    } else if (i.getTag().compareTo("AP") == 0) {
 			org.debian.paulliu.darnwdl.wdlo.AP ap = new org.debian.paulliu.darnwdl.wdlo.AP(i);
 			java.io.StringWriter sw = new java.io.StringWriter();

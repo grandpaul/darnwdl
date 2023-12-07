@@ -139,7 +139,8 @@ public class WPass1 {
     private java.util.ArrayList<Long> readDynaPKCP() {
 	java.util.ArrayList<Long> ret = null;
 	long l;
-	long seekLen = -1;
+	long crc32;
+	long compressedLen = -1;
 	long uncompressedSize = 0;
 	String header;
 	header = readString(8);
@@ -154,17 +155,18 @@ public class WPass1 {
 	if (uncompressedSize < 0) {
 	    return ret;
 	}
-	seekLen = readInt32();
-	if (seekLen < 0) {
+	compressedLen = readInt32();
+	if (compressedLen < 0) {
 	    return ret;
 	}
-	l = readInt32();
+	crc32 = readInt32();
 	if (l<0) {
 	    return ret;
 	}
 	ret = new java.util.ArrayList<Long>();
-	ret.add(Long.valueOf(seekLen));
+	ret.add(Long.valueOf(compressedLen));
 	ret.add(Long.valueOf(uncompressedSize));
+	ret.add(Long.valueOf(crc32));
 	return ret;
     }
 
@@ -177,11 +179,17 @@ public class WPass1 {
 		long decompressedDataLength = dataLength.get(1).longValue();
 		byte[] data = inputFileStream.readNBytes(((int)compressedDataLength));
 		byte[] result;
+		long currentPos;
 
 		org.debian.paulliu.darnwdl.jni.DynamiteJNI dynamiteJNI = org.debian.paulliu.darnwdl.jni.DynamiteJNI.getInstance();
 
 		result = dynamiteJNI.explode(data);
 		outputFileStream.write(result);
+		try {
+		    currentPos = inputFileStream.getChannel().position();
+		} catch (Exception e) {
+		    currentPos = 0;
+		}
 	    }
 	} catch (Exception e) {
 	    logger.severe(String.format("Decode error: %1$s", e.toString()));
@@ -190,25 +198,8 @@ public class WPass1 {
 
 	return true;
     }
-    
-    public WPass1(java.io.File inputFile, java.io.File outputFile) {
-	this.inputFile = inputFile;
-	this.outputFile = outputFile;
 
-	this.logger = java.util.logging.Logger.getLogger(Main.loggerName);
-
-	if (! openInputFile()) {
-	    return;
-	}
-
-	if (! decodeMagicNumber()) {
-	    return;
-	}
-
-	if (! decodeHeader()) {
-	    return;
-	}
-
+    private void skipUnknownDataWithoutUsingName() {
 	/* unknown data */
 	try {
 	    inputFileStream.skipNBytes(50);
@@ -229,6 +220,54 @@ public class WPass1 {
 	} catch (Exception e) {
 	    logger.severe("Cannot skip forward data");
 	    return;
+	}
+    }
+
+    private void skipNameData() {
+	long endOfName = properties.get("name").get(1).longValue() + properties.get("name").get(2).longValue();
+	long currentPos = 0;
+	try {
+	    currentPos = inputFileStream.getChannel().position();
+	} catch (Exception e) {
+	    logger.severe("Cannot get current position: " + e.toString());
+	    return;
+	}	    
+	if (currentPos > endOfName) {
+	    logger.severe(String.format("Cannot skip Name Data due to we missed it. Current pos: %1$d, End of Name pos: %2$d", currentPos, endOfName));
+	    return;
+	}
+	if (endOfName > currentPos) {
+	    try {
+		inputFileStream.skipNBytes(endOfName - currentPos);
+	    } catch (Exception e) {
+		logger.severe("Cannot skip Name Data");
+		return;
+	    }
+	}
+    }
+    
+    public WPass1(java.io.File inputFile, java.io.File outputFile) {
+	this.inputFile = inputFile;
+	this.outputFile = outputFile;
+
+	this.logger = java.util.logging.Logger.getLogger(Main.loggerName);
+
+	if (! openInputFile()) {
+	    return;
+	}
+
+	if (! decodeMagicNumber()) {
+	    return;
+	}
+
+	if (! decodeHeader()) {
+	    return;
+	}
+
+	if (properties.containsKey("name")) {
+	    skipNameData();
+	} else {
+	    skipUnknownDataWithoutUsingName();
 	}
 
 	if (! openOutputFile()) {

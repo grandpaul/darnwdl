@@ -39,7 +39,26 @@ public class PagesPrintable implements java.awt.print.Printable {
 	}
 	org.debian.paulliu.darnwdl.Page page1 = pageList.get(pageIndex);
 	java.awt.Image img = page1.render();
-	graphics.drawImage(img, 0, 0, (int)pageFormat.getWidth(), (int)pageFormat.getHeight(), null);
+	javax.swing.ImageIcon image1icon = new javax.swing.ImageIcon(img);
+	double srcWidth = (double)image1icon.getIconWidth();
+	double srcHeight = (double)image1icon.getIconHeight();
+	double targetWidth = pageFormat.getImageableWidth();
+	double targetHeight = pageFormat.getImageableHeight();
+	double targetX = pageFormat.getImageableX();
+	double targetY = pageFormat.getImageableY();
+	if (srcWidth <= 0 || srcHeight <= 0) {
+	    return java.awt.print.Printable.PAGE_EXISTS;
+	}
+	if (targetWidth * srcHeight < targetHeight * srcWidth) {
+	    /* targetWidth / srcWidth < targetHeight / srcHeight */
+	    double adjustHeight = srcHeight * targetWidth / srcWidth;
+	    double adjustY = targetY + (targetHeight - adjustHeight) / 2.0;
+	    graphics.drawImage(img, (int)targetX, (int)adjustY, (int)targetWidth, (int)adjustHeight, null);
+	} else {
+	    double adjustWidth = srcWidth * targetHeight / srcHeight;
+	    double adjustX = targetX + (targetWidth - adjustWidth) / 2.0;
+	    graphics.drawImage(img, (int)adjustX, (int)targetY, (int)adjustWidth, (int)targetHeight, null);
+	}	    
 	return java.awt.print.Printable.PAGE_EXISTS;
     }
     
