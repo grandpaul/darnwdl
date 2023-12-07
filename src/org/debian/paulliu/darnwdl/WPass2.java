@@ -249,6 +249,9 @@ public class WPass2 {
 			wdloIndex.setReference("BC", lastBC);
 		    }
 		} else if (tagBuf[1] == 0) {
+		    if (tagBuf[0] == 6) {
+			break;
+		    }
 		    long seeklen = readInt32();
 		    if (firstSPTagIndex == -1) {
 			firstSPTagIndex = indexList.size()-1;
