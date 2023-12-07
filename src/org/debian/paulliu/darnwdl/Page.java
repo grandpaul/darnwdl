@@ -56,6 +56,7 @@ public class Page {
 	    if (index1.getTag() == null) {
 		continue;
 	    }
+	    logger.info(String.format("Drawing %1$d %2$s", i, index1.getTag()));
 	    if (index1.getTag().compareTo("ET") == 0 || index1.getTag().compareTo("EU") == 0) {
 		org.debian.paulliu.darnwdl.wdlo.ET et = new org.debian.paulliu.darnwdl.wdlo.ET(index1);
 		int indexFT = et.getReference("FT");

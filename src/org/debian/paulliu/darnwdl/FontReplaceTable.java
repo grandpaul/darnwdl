@@ -20,7 +20,6 @@ package org.debian.paulliu.darnwdl;
 public class FontReplaceTable {
     private java.util.HashSet<String> availableFonts;
     private java.util.HashMap<String, java.util.LinkedList<String> > replacementsData;
-    private java.util.HashMap<String, String> replacements;
     private static org.debian.paulliu.darnwdl.FontReplaceTable instance = null;
 
     private void initReplacementsData() {
@@ -87,12 +86,15 @@ public class FontReplaceTable {
 	list1.add("SansSerif");
 	replacementsData.put("仿宋_GB2312", list1);
 
-	replacements = new java.util.HashMap<String, String>();
-	
 	for (String key : replacementsData.keySet()) {
-	    for (String data : replacementsData.get(key)) {
-		if (getAvailableFonts().contains(data)) {
-		    replacements.put(key, data);
+	    while (replacementsData.get(key).size() > 0) {
+		String data = replacementsData.get(key).peekFirst();
+		if (data == null) {
+		    break;
+		}
+		if (! getAvailableFonts().contains(data)) {
+		    replacementsData.get(key).pollFirst();
+		} else {
 		    break;
 		}
 	    }
@@ -100,13 +102,19 @@ public class FontReplaceTable {
     }
 
     public String getFontReplacement(String fontName) {
+	String retDefault = new String("Serif");
+	String ret = retDefault;
 	if (getAvailableFonts().contains(fontName)) {
 	    return fontName;
 	}
-	if (!replacements.containsKey(fontName)) {
-	    return "Serif";
+	if (!replacementsData.containsKey(fontName)) {
+	    return ret;
 	}
-	return replacements.get(fontName);
+	ret = replacementsData.get(fontName).peekFirst();
+	if (ret == null) {
+	    ret = retDefault;
+	}
+	return ret;
     }
 
     public java.util.HashSet<String> getAvailableFonts() {

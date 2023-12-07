@@ -114,7 +114,9 @@ public class MainWindow extends JFrame {
 	    return;
 	}
 	page = pages.get(currentPage);
+	logger.info(String.format("Rendering page %1$d", currentPage));
 	java.awt.Image img = page.render();
+	logger.info(String.format("Render page %1$d Done", currentPage));
 	javax.swing.ImageIcon image1icon = new javax.swing.ImageIcon(img);
 	double imgWidth = (double)image1icon.getIconWidth();
 	double imgHeight = (double)image1icon.getIconHeight();
@@ -176,13 +178,16 @@ public class MainWindow extends JFrame {
 		logger.severe(String.format("Cannot create temporary file %1$s", e.toString()));
 	    }
 	    org.debian.paulliu.darnwdl.WPass1 wPass1 = new org.debian.paulliu.darnwdl.WPass1(wdlFile, wdloFile);
+	    logger.info("Pass1 done");
 	} else if (wdlFile.getName().toUpperCase().endsWith(".WDLO")) {
 	    wdloFile = wdlFile;
 	}
 	if (wdloFile != null) {
 	    org.debian.paulliu.darnwdl.WPass2 wPass2 = new org.debian.paulliu.darnwdl.WPass2(wdloFile);
+	    logger.info("Pass2 done");
 	    org.debian.paulliu.darnwdl.PageListGenerator pageListGenerator = new org.debian.paulliu.darnwdl.PageListGenerator (wPass2);
 	    pages = pageListGenerator.getPageList();
+	    logger.info("PageListGenerator done");
 	    currentPage = 0;
 	    if (currentPage < pages.size()) {
 		drawPage();
@@ -238,6 +243,26 @@ public class MainWindow extends JFrame {
 	    stopFit();
 	    drawPanel.clearImage();
 	    statusBar.setText(" ");
+	}
+    }
+
+    private class ToolboxButtonPrintActionListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+	    if (pages == null) {
+		return;
+	    }
+	    boolean r1;
+	    org.debian.paulliu.darnwdl.PagesPrintable pagesPrintable = new org.debian.paulliu.darnwdl.PagesPrintable(pages);
+	    java.awt.print.PrinterJob pj = java.awt.print.PrinterJob.getPrinterJob();
+	    pj.setPrintable(pagesPrintable);
+	    r1 = pj.printDialog();
+	    if (r1) {
+		try {
+		    pj.print();
+		} catch (java.awt.print.PrinterException pe2) {
+		    logger.severe("Print error: "+pe2.toString());
+		}
+	    }
 	}
     }
 
@@ -611,7 +636,7 @@ public class MainWindow extends JFrame {
 	javax.swing.JButton toolBoxButton_Forward = createToolBoxButton("Forward", org.debian.paulliu.darnwdl.ui.StockImage.getInstance().getGoForward());
 	javax.swing.JButton toolBoxButton_Last = createToolBoxButton("Last", org.debian.paulliu.darnwdl.ui.StockImage.getInstance().getGoLast());
 	
-	toolBoxButton_Print.setEnabled(false);
+	//toolBoxButton_Print.setEnabled(false);
 
 	toolBox.add(toolBoxButton_Open);
 	toolBox.add(toolBoxButton_Close);
@@ -629,6 +654,7 @@ public class MainWindow extends JFrame {
 
 	toolBoxButton_Open.addActionListener(new ToolboxButtonOpenActionListener());
 	toolBoxButton_Close.addActionListener(new ToolboxButtonCloseActionListener());
+	toolBoxButton_Print.addActionListener(new ToolboxButtonPrintActionListener());
 	toolBoxButton_FitP.addActionListener(new ToolboxButtonFitPActionListener());
 	toolBoxButton_FitW.addActionListener(new ToolboxButtonFitWActionListener());
 	toolBoxButton_FitH.addActionListener(new ToolboxButtonFitHActionListener());

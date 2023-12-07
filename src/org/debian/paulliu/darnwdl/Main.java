@@ -247,7 +247,7 @@ public class Main {
 	    }
 	    return;
 	}
-	if (args.length >= 1 && args[0].equals("font")) {
+	if (args.length >= 1 && args[0].equals("listfont")) {
 	    java.util.logging.Logger.getLogger(Main.loggerName).setLevel(java.util.logging.Level.INFO);
 	    org.debian.paulliu.darnwdl.FontReplaceTable frt = org.debian.paulliu.darnwdl.FontReplaceTable.getInstance();
 	    for (String fontName : frt.getAvailableFonts()) {

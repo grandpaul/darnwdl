@@ -28,6 +28,11 @@ public class PagesPrintable implements java.awt.print.Printable {
 	this.pageList = pagelistGenerator.getPageList();
     }
 
+    public PagesPrintable (java.util.ArrayList <org.debian.paulliu.darnwdl.Page> pageList) {
+	this.pagelistGenerator = null;
+	this.pageList = pageList;
+    }
+
     public int print(java.awt.Graphics graphics, java.awt.print.PageFormat pageFormat, int pageIndex) {
 	if (!(0 <= pageIndex && pageIndex < this.pageList.size())) {
 	    return java.awt.print.Printable.NO_SUCH_PAGE;
@@ -37,7 +42,10 @@ public class PagesPrintable implements java.awt.print.Printable {
 	graphics.drawImage(img, 0, 0, (int)pageFormat.getWidth(), (int)pageFormat.getHeight(), null);
 	return java.awt.print.Printable.PAGE_EXISTS;
     }
-
+    
+    /**
+     * Directly print all pages into first printer
+     */
     public void printAll() {
 	javax.print.DocFlavor flavor = javax.print.DocFlavor.SERVICE_FORMATTED.PRINTABLE;
 	javax.print.attribute.PrintRequestAttributeSet aset = new javax.print.attribute.HashPrintRequestAttributeSet();
