@@ -27,6 +27,8 @@ public class FontReplaceTable {
 
 	java.util.LinkedList<String> list1;
 
+	/* init replacements of the fonts */
+	
 	list1 = new java.util.LinkedList<String>();
 	list1.add("DFKai-sb");
 	list1.add("AR PL UKai TW");
@@ -86,6 +88,8 @@ public class FontReplaceTable {
 	list1.add("SansSerif");
 	replacementsData.put("仿宋_GB2312", list1);
 
+	/* remove unsupported replacements */
+
 	for (String key : replacementsData.keySet()) {
 	    while (replacementsData.get(key).size() > 0) {
 		String data = replacementsData.get(key).peekFirst();
@@ -97,6 +101,9 @@ public class FontReplaceTable {
 		} else {
 		    break;
 		}
+	    }
+	    if (replacementsData.get(key).size() <= 0) {
+		replacementsData.remove(key);
 	    }
 	}
     }
