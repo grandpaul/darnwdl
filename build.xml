@@ -6,7 +6,7 @@
         <property name="jar.dir" value="."/>
 
         <path id="maincp">
-	  <pathelement path="/usr/share/java/junit.jar" />
+	  <pathelement path="/usr/share/java/junit-jupiter-api.jar" />
 	  <pathelement path="/usr/share/java/batik-bridge.jar" />
 	  <pathelement path="/usr/share/java/batik-dom.jar" />
 	  <pathelement path="/usr/share/java/batik-svg-dom.jar" />
@@ -26,24 +26,26 @@
 	</target>
 
 	<target name="test" depends="build">
-	  <junit printsummary="yes">
-	    <formatter type="plain" usefile="false" />
+	  <junitlauncher printSummary="true">
 	    <classpath refid="maincp">
+	    </classpath>
+	    <classpath>
+	      <pathelement path="/usr/share/java/junit-jupiter-engine.jar" />
+	      <pathelement path="/usr/share/java/junit-platform-commons.jar" />
+	      <pathelement path="/usr/share/java/junit-platform-engine.jar" />
+	      <pathelement path="/usr/share/java/junit-platform-launcher.jar" />
+	      <pathelement path="/usr/share/java/opentest4j.jar" />
 	    </classpath>
 	    <classpath>
 	      <pathelement path="${build.dir}"/>
 	    </classpath>
-	  </junit>
-	</target>
-	<target name="test-withnet" depends="test">
-	  <junit printsummary="yes">
-	    <formatter type="plain" usefile="false" />
-	    <classpath refid="maincp">
-	    </classpath>
-	    <classpath>
-	      <pathelement path="${build.dir}"/>
-	    </classpath>
-	  </junit>
+	    <testclasses>
+              <fileset dir="${build.dir}">
+		<include name="org/debian/paulliu/darnwdl/**/test/**/"/>
+              </fileset>
+	    </testclasses>
+	    <!--<test name="org.debian.paulliu.darnwdl.test.WPass1Test" />-->
+	  </junitlauncher>
 	</target>
 	<target name="package" depends="build">
 	  <jar destfile="darnwdl.jar" level="9"
@@ -54,7 +56,7 @@
 	    <manifest>
 	      <attribute name="Manifest-Version" value="1.0" />
 	      <attribute name="Main-Class" value="org.debian.paulliu.darnwdl.Main" />
-	      <attribute name="Class-Path" value="${jar.classpath} /usr/share/java/junit.jar /usr/share/java/batik-bridge.jar /usr/share/java/batik-dom.jar /usr/share/java/batik-svg-dom.jar /usr/share/java/batik-anim.jar /usr/share/java/xml-apis.jar" />
+	      <attribute name="Class-Path" value="${jar.classpath} /usr/share/java/batik-bridge.jar /usr/share/java/batik-dom.jar /usr/share/java/batik-svg-dom.jar /usr/share/java/batik-anim.jar /usr/share/java/xml-apis.jar" />
 	    </manifest>
 	  </jar>
 	</target>
