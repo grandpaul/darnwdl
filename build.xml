@@ -43,6 +43,9 @@
               <fileset dir="${build.dir}">
 		<include name="org/debian/paulliu/darnwdl/**/test/**/"/>
               </fileset>
+	      <fork>
+		<jvmarg value="-Djava.library.path=src/jni"/>
+	      </fork>
 	    </testclasses>
 	    <!--<test name="org.debian.paulliu.darnwdl.test.WPass1Test" />-->
 	  </junitlauncher>
